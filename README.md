@@ -33,34 +33,54 @@ my-leetcode-test
 ## Setup Instructions
 
 1. **Clone the repository:**
-   ```
+   ```bash
    git clone <repository-url>
    cd my-leetcode-test
    ```
 
 2. **Install dependencies:**
-   ```
+   ```bash
    npm install
    ```
 
 3. **Compile TypeScript:**
-   ```
+   ```bash
    npm run build
    ```
 
 4. **Run tests:**
-   ```
+   ```bash
    npm test
    ```
 
 ## Usage
 
 - To start the application, run:
-  ```
+  ```bash
   npm start
   ```
 
 - The application can be extended by adding more pattern solutions in `src/problems/` and corresponding tests in `tests/problems/`.
+
+## Core LeetCode Patterns
+
+| # | Pattern | Description | Common Use Cases |
+|---|---------|-------------|------------------|
+| 1️⃣ | Sliding Window | Use a window that slides over data to track a subset | Max subarray sum, longest substring |
+| 2️⃣ | Two Pointers | Use two indices moving at different speeds or directions | Sorted arrays, merging, partitioning |
+| 3️⃣ | Fast & Slow Pointers | Detect cycles or find midpoints in linked lists | Cycle detection, palindrome check |
+| 4️⃣ | Depth-First Search (DFS) | Recursively explore all paths | Tree/graph traversal, backtracking |
+| 5️⃣ | Breadth-First Search (BFS) | Explore level by level using a queue | Shortest path, level-order traversal |
+| 6️⃣ | Binary Search | Divide and conquer in sorted data | Search, optimization, square roots |
+| 7️⃣ | Backtracking | Try all possibilities, undo choices | Permutations, combinations, Sudoku |
+| 8️⃣ | Dynamic Programming (DP) | Break problems into overlapping subproblems | Fibonacci, knapsack, edit distance |
+| 9️⃣ | Greedy Algorithms | Make locally optimal choices | Interval scheduling, coin change |
+| 🔟 | Heap / Priority Queue | Efficiently access min/max elements | Top K elements, Dijkstra's algorithm |
+| 1️⃣1️⃣ | Trie | Tree-like structure for strings | Word search, autocomplete |
+| 1️⃣2️⃣ | Graph Algorithms | Traverse or analyze graph structures | Connected components, shortest paths |
+| 1️⃣3️⃣ | Topological Sort | Order nodes respecting dependencies | Course scheduling, build systems |
+| 1️⃣4️⃣ | Union Find (Disjoint Set) | Track connected components | Cycle detection, Kruskal's algorithm |
+| 1️⃣5️⃣ | Bit Manipulation | Use bitwise operations to optimize | Single number, power of two, masks |
 
 ## Coding Patterns
 
@@ -259,60 +279,35 @@ The core algorithmic patterns have been implemented! To complete the study proje
 3. **Add performance benchmarking**
 4. **Include complexity analysis for each solution**
 
-useful link
-////////////////////////////
-To-Do List Tracker
+## 🔗 Useful Links
+
+### To-Do List Tracker
 Here is a to-do list tracker for the Leetcode problems:
 
- Range Sum Query - Immutable - LeetCode (Not started, Easy, Prefix Sum)
- Contiguous Array - LeetCode (Not started, Medium, Prefix Sum)
- Subarray Sum Equals K - LeetCode (Not started, Medium, Prefix Sum)
- Two Sum II - Input Array Is Sorted - LeetCode (Not started, Medium, Two Pointers)
- 3Sum - LeetCode (Not started, Medium, Two Pointers)
- Container With Most Water - LeetCode (Not started, Medium, Two Pointers)
- Maximum Average Subarray I - LeetCode (Not started, Easy, Sliding Window)
- Longest Substring Without Repeating Characters - LeetCode (Not started, Medium, Sliding Window)
- Minimum Window Substring - LeetCode (Not started, Hard, Sliding Window)
- Linked List Cycle - LeetCode (Not started, Easy, Fast & Slow Pointers)
- Happy Number - LeetCode (Not started, Easy, Fast & Slow Pointers)
- Find the Duplicate Number - LeetCode (Not started, Medium, Fast & Slow Pointers)
- Reverse Linked List - LeetCode (Not started, Easy, LinkedList In-place Reversal)
- Reverse Linked List II - LeetCode (Not started, Medium, LinkedList In-place Reversal)
- Swap Nodes in Pairs - LeetCode (Not started, Medium, LinkedList In-place Reversal)
- Next Greater Element I - LeetCode (Not started, Easy, Monotonic Stack)
- Daily Temperatures - LeetCode (Not started, Medium, Monotonic Stack)
- Largest Rectangle in Histogram - LeetCode (Not started, Hard, Monotonic Stack)
- Kth Largest Element in an Array - LeetCode (Not started, Medium, Top ‘K’ Elements)
- Top K Frequent Elements - LeetCode (Not started, Medium, Top ‘K’ Elements)
- Find K Pairs with Smallest Sums - LeetCode (Not started, Medium, Top ‘K’ Elements)
- Merge Intervals - LeetCode (Not started, Medium, Overlapping Intervals)
- Insert Interval - LeetCode (Not started, Medium, Overlapping Intervals)
- Non-overlapping Intervals - LeetCode (Not started, Medium, Overlapping Intervals)
- Search in Rotated Sorted Array - LeetCode (Not started, Medium, "Modified Binary Search")
- Find Minimum in Rotated Sorted Array - LeetCode (Not started, Medium, "Modified Binary Search")
- Search a 2D Matrix II - LeetCode (Not started, Medium, "Modified Binary Search")
- Binary Tree Paths - LeetCode (Not started, Easy, Binary Tree Traversal)
- Kth Smallest Element in a BST - LeetCode (Not started, Medium, Binary Tree Traversal)
- Binary Tree Maximum Path Sum - LeetCode (Not started, Hard, Binary Tree Traversal)
- Clone Graph - LeetCode (Not started, Medium, Depth-First Search (DFS))
- Path Sum II - LeetCode (Not started, Medium, Depth-First Search (DFS))
- Course Schedule II - LeetCode (Not started, Medium, Depth-First Search (DFS))
- Binary Tree Level Order Traversal - LeetCode (Not started, Medium, Breadth-First Search (BFS))
- Rotting Oranges - LeetCode (Not started, Medium, Breadth-First Search (BFS))
- Word Ladder - LeetCode (Not started, Hard, Breadth-First Search (BFS))
- Flood Fill (Not started, Easy, "Matrix Traversal")
- Number of Islands (Not started, Medium, "Matrix Traversal")
- Surrounded Regions (Not started, Medium, "Matrix Traversal")
- Permutations - LeetCode (Not started, Medium, Backtracking)
- Subsets - LeetCode (Not started, Medium, Backtracking)
- N-Queens - LeetCode (Not started, Hard, Backtracking)
- Climbing Stairs - LeetCode (Not started, Easy, Dynamic Programming Patterns)
- House Robber - LeetCode (Not started, Medium, Dynamic Programming Patterns)
- Coin Change - LeetCode (Not started, Medium, Dynamic Programming Patterns)
- Longest Common Subsequence - LeetCode (Not started, Medium, Dynamic Programming Patterns)
- Longest Increasing Subsequence - LeetCode (Not started, Medium, Dynamic Programming Patterns)
- Partition Equal Subset Sum - LeetCode (Not started, Medium, Dynamic Programming Patterns)
+- [Range Sum Query - Immutable - LeetCode](https://leetcode.com/problems/range-sum-query-immutable/) (Not started, Easy, Prefix Sum)
+- [Contiguous Array - LeetCode](https://leetcode.com/problems/contiguous-array/) (Not started, Medium, Prefix Sum)
+- [Subarray Sum Equals K - LeetCode](https://leetcode.com/problems/subarray-sum-equals-k/) (Not started, Medium, Prefix Sum)
+- [Two Sum II - Input Array Is Sorted - LeetCode](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) (Not started, Medium, Two Pointers)
+- [3Sum - LeetCode](https://leetcode.com/problems/3sum/) (Not started, Medium, Two Pointers)
+- [Container With Most Water - LeetCode](https://leetcode.com/problems/container-with-most-water/) (Not started, Medium, Two Pointers)
+- [Maximum Average Subarray I - LeetCode](https://leetcode.com/problems/maximum-average-subarray-i/) (Not started, Easy, Sliding Window)
+- [Longest Substring Without Repeating Characters - LeetCode](https://leetcode.com/problems/longest-substring-without-repeating-characters/) (Not started, Medium, Sliding Window)
+- [Minimum Window Substring - LeetCode](https://leetcode.com/problems/minimum-window-substring/) (Not started, Hard, Sliding Window)
+- [Linked List Cycle - LeetCode](https://leetcode.com/problems/linked-list-cycle/) (Not started, Easy, Fast & Slow Pointers)
+- [Happy Number - LeetCode](https://leetcode.com/problems/happy-number/) (Not started, Easy, Fast & Slow Pointers)
+- [Find the Duplicate Number - LeetCode](https://leetcode.com/problems/find-the-duplicate-number/) (Not started, Medium, Fast & Slow Pointers)
+- [Reverse Linked List - LeetCode](https://leetcode.com/problems/reverse-linked-list/) (Not started, Easy, LinkedList In-place Reversal)
+- [Reverse Linked List II - LeetCode](https://leetcode.com/problems/reverse-linked-list-ii/) (Not started, Medium, LinkedList In-place Reversal)
+- [Swap Nodes in Pairs - LeetCode](https://leetcode.com/problems/swap-nodes-in-pairs/) (Not started, Medium, LinkedList In-place Reversal)
+- [Next Greater Element I - LeetCode](https://leetcode.com/problems/next-greater-element-i/) (Not started, Easy, Monotonic Stack)
+- [Daily Temperatures - LeetCode](https://leetcode.com/problems/daily-temperatures/) (Not started, Medium, Monotonic Stack)
+- [Largest Rectangle in Histogram - LeetCode](https://leetcode.com/problems/largest-rectangle-in-histogram/) (Not started, Hard, Monotonic Stack)
+- [Kth Largest Element in an Array - LeetCode](https://leetcode.com/problems/kth-largest-element-in-an-array/) (Not started, Medium, Top 'K' Elements)
+- [Top K Frequent Elements - LeetCode](https://leetcode.com/problems/top-k-frequent-elements/) (Not started, Medium, Top 'K' Elements)
+- [Find K Pairs with Smallest Sums - LeetCode](https://leetcode.com/problems/find-k-pairs-with-smallest-sums/) (Not started, Medium, Top 'K' Elements)
+- [Merge Intervals - LeetCode](https://leetcode.com/problems/merge-intervals/) (Not started, Medium, Overlapping Intervals)
+- [Insert Interval - LeetCode](https://leetcode.com/problems/insert-interval/) (Not started, Medium, Overlapping Intervals)
+- [Non-overlapping Intervals - LeetCode](https://leetcode.com/problems/non-overlapping-intervals/) (Not started, Medium, Overlapping Intervals)
 
- /////////////////////////////////
- link for leetcode pattern
- https://blog.ibsanju.com/blog/mastering-15-common-patterns-in-leetcode-problems
+### Pattern Reference
+- [Mastering 15 Common Patterns in LeetCode Problems](https://blog.ibsanju.com/blog/mastering-15-common-patterns-in-leetcode-problems)
