@@ -258,3 +258,61 @@ The core algorithmic patterns have been implemented! To complete the study proje
 2. **Create comprehensive test suites**
 3. **Add performance benchmarking**
 4. **Include complexity analysis for each solution**
+
+useful link
+////////////////////////////
+To-Do List Tracker
+Here is a to-do list tracker for the Leetcode problems:
+
+ Range Sum Query - Immutable - LeetCode (Not started, Easy, Prefix Sum)
+ Contiguous Array - LeetCode (Not started, Medium, Prefix Sum)
+ Subarray Sum Equals K - LeetCode (Not started, Medium, Prefix Sum)
+ Two Sum II - Input Array Is Sorted - LeetCode (Not started, Medium, Two Pointers)
+ 3Sum - LeetCode (Not started, Medium, Two Pointers)
+ Container With Most Water - LeetCode (Not started, Medium, Two Pointers)
+ Maximum Average Subarray I - LeetCode (Not started, Easy, Sliding Window)
+ Longest Substring Without Repeating Characters - LeetCode (Not started, Medium, Sliding Window)
+ Minimum Window Substring - LeetCode (Not started, Hard, Sliding Window)
+ Linked List Cycle - LeetCode (Not started, Easy, Fast & Slow Pointers)
+ Happy Number - LeetCode (Not started, Easy, Fast & Slow Pointers)
+ Find the Duplicate Number - LeetCode (Not started, Medium, Fast & Slow Pointers)
+ Reverse Linked List - LeetCode (Not started, Easy, LinkedList In-place Reversal)
+ Reverse Linked List II - LeetCode (Not started, Medium, LinkedList In-place Reversal)
+ Swap Nodes in Pairs - LeetCode (Not started, Medium, LinkedList In-place Reversal)
+ Next Greater Element I - LeetCode (Not started, Easy, Monotonic Stack)
+ Daily Temperatures - LeetCode (Not started, Medium, Monotonic Stack)
+ Largest Rectangle in Histogram - LeetCode (Not started, Hard, Monotonic Stack)
+ Kth Largest Element in an Array - LeetCode (Not started, Medium, Top ‘K’ Elements)
+ Top K Frequent Elements - LeetCode (Not started, Medium, Top ‘K’ Elements)
+ Find K Pairs with Smallest Sums - LeetCode (Not started, Medium, Top ‘K’ Elements)
+ Merge Intervals - LeetCode (Not started, Medium, Overlapping Intervals)
+ Insert Interval - LeetCode (Not started, Medium, Overlapping Intervals)
+ Non-overlapping Intervals - LeetCode (Not started, Medium, Overlapping Intervals)
+ Search in Rotated Sorted Array - LeetCode (Not started, Medium, "Modified Binary Search")
+ Find Minimum in Rotated Sorted Array - LeetCode (Not started, Medium, "Modified Binary Search")
+ Search a 2D Matrix II - LeetCode (Not started, Medium, "Modified Binary Search")
+ Binary Tree Paths - LeetCode (Not started, Easy, Binary Tree Traversal)
+ Kth Smallest Element in a BST - LeetCode (Not started, Medium, Binary Tree Traversal)
+ Binary Tree Maximum Path Sum - LeetCode (Not started, Hard, Binary Tree Traversal)
+ Clone Graph - LeetCode (Not started, Medium, Depth-First Search (DFS))
+ Path Sum II - LeetCode (Not started, Medium, Depth-First Search (DFS))
+ Course Schedule II - LeetCode (Not started, Medium, Depth-First Search (DFS))
+ Binary Tree Level Order Traversal - LeetCode (Not started, Medium, Breadth-First Search (BFS))
+ Rotting Oranges - LeetCode (Not started, Medium, Breadth-First Search (BFS))
+ Word Ladder - LeetCode (Not started, Hard, Breadth-First Search (BFS))
+ Flood Fill (Not started, Easy, "Matrix Traversal")
+ Number of Islands (Not started, Medium, "Matrix Traversal")
+ Surrounded Regions (Not started, Medium, "Matrix Traversal")
+ Permutations - LeetCode (Not started, Medium, Backtracking)
+ Subsets - LeetCode (Not started, Medium, Backtracking)
+ N-Queens - LeetCode (Not started, Hard, Backtracking)
+ Climbing Stairs - LeetCode (Not started, Easy, Dynamic Programming Patterns)
+ House Robber - LeetCode (Not started, Medium, Dynamic Programming Patterns)
+ Coin Change - LeetCode (Not started, Medium, Dynamic Programming Patterns)
+ Longest Common Subsequence - LeetCode (Not started, Medium, Dynamic Programming Patterns)
+ Longest Increasing Subsequence - LeetCode (Not started, Medium, Dynamic Programming Patterns)
+ Partition Equal Subset Sum - LeetCode (Not started, Medium, Dynamic Programming Patterns)
+
+ /////////////////////////////////
+ link for leetcode pattern
+ https://blog.ibsanju.com/blog/mastering-15-common-patterns-in-leetcode-problems
