@@ -1,0 +1,1 @@
+// This is the entry point of the application. It initializes the application and may contain the main logic or function calls.
