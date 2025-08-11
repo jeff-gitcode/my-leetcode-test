@@ -264,3 +264,61 @@ export function findOrder(numCourses: number, prerequisites: number[][]): number
 
     return result.reverse(); // Reverse to get correct topological order
 }
+
+/**
+ * Depth-First Search (DFS) on a directed/undirected graph (adjacency list)
+ * Recursive implementation
+ * @param graph - Adjacency list where graph[u] is neighbors of u
+ * @param start - Start node index
+ * @returns Visit order of nodes
+ */
+export function dfsGraphRecursive(graph: number[][], start: number): number[] {
+    const n = graph.length;
+    if (start < 0 || start >= n) return [];
+
+    const visited: boolean[] = Array(n).fill(false);
+    const order: number[] = [];
+
+    const dfs = (u: number): void => {
+        visited[u] = true;
+        order.push(u);
+        for (const v of graph[u]) {
+            if (!visited[v]) dfs(v);
+        }
+    };
+
+    dfs(start);
+    return order;
+}
+
+/**
+ * Depth-First Search (DFS) on a directed/undirected graph (adjacency list)
+ * Iterative implementation using a stack
+ * @param graph - Adjacency list where graph[u] is neighbors of u
+ * @param start - Start node index
+ * @returns Visit order of nodes
+ */
+export function dfsGraphIterative(graph: number[][], start: number): number[] {
+    const n = graph.length;
+    if (start < 0 || start >= n) return [];
+
+    const visited: boolean[] = Array(n).fill(false);
+    const order: number[] = [];
+    const stack: number[] = [start];
+
+    while (stack.length) {
+        const u = stack.pop()!;
+        if (visited[u]) continue;
+        visited[u] = true;
+        order.push(u);
+
+        // Push neighbors in reverse to approximate recursive order
+        const neighbors = graph[u];
+        for (let i = neighbors.length - 1; i >= 0; i--) {
+            const v = neighbors[i];
+            if (!visited[v]) stack.push(v);
+        }
+    }
+
+    return order;
+}

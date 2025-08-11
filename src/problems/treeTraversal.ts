@@ -219,3 +219,27 @@ export function maxPathSum(root: TreeNode | null): number {
     maxGain(root);
     return maxSum;
 }
+
+/**
+ * Search in a Binary Search Tree (BST)
+ * @param root - Root of the BST
+ * @param val - Value to search
+ * @returns Subtree rooted at the found node, or null if not found
+ */
+export function searchBST(root: TreeNode | null, val: number): TreeNode | null {
+    if (!root) return null;
+    if (root.val === val) return root;
+    return val < root.val ? searchBST(root.left, val) : searchBST(root.right, val);
+}
+
+/**
+ * Iterative variant of Search in a BST
+ */
+export function searchBSTIterative(root: TreeNode | null, val: number): TreeNode | null {
+    let curr = root;
+    while (curr) {
+        if (curr.val === val) return curr;
+        curr = val < curr.val ? curr.left : curr.right;
+    }
+    return null;
+}

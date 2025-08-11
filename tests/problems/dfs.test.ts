@@ -1,4 +1,3 @@
-
 import { TreeNode } from '@/problems/treeTraversal';
 import {
     maxDepth,
@@ -10,6 +9,8 @@ import {
     cloneGraph,
     pathSum,
     findOrder,
+    dfsGraphRecursive,    // added
+    dfsGraphIterative,    // added
 } from '@/problems/dfs';
 
 describe('Depth-First Search (DFS) Problems', () => {
@@ -409,6 +410,45 @@ describe('Depth-First Search (DFS) Problems', () => {
             const node = new GraphNode(-5);
             expect(node.val).toBe(-5);
             expect(node.neighbors).toEqual([]);
+        });
+    });
+
+    // New tests for graph DFS on adjacency lists
+    describe('Graph DFS (dfsGraphRecursive & dfsGraphIterative)', () => {
+        it('should return [] for invalid start or empty graph', () => {
+            expect(dfsGraphRecursive([], 0)).toEqual([]);
+            expect(dfsGraphIterative([], 0)).toEqual([]);
+            const graph = [[1]];
+            expect(dfsGraphRecursive(graph, -1)).toEqual([]);
+            expect(dfsGraphIterative(graph, 2)).toEqual([]);
+        });
+
+        it('should match traversal order on a simple DAG', () => {
+            // 0 -> 1 -> 3, 0 -> 2 -> 3
+            const graph = [[1, 2], [3], [3], []];
+            expect(dfsGraphRecursive(graph, 0)).toEqual([0, 1, 3, 2]);
+            expect(dfsGraphIterative(graph, 0)).toEqual([0, 1, 3, 2]);
+        });
+
+        it('should visit only reachable component in a disconnected graph', () => {
+            // Component A: 0 -> 1, Component B: 2 -> 3
+            const graph = [[1], [], [3], []];
+            expect(dfsGraphRecursive(graph, 0)).toEqual([0, 1]);
+            expect(dfsGraphIterative(graph, 0)).toEqual([0, 1]);
+        });
+
+        it('should handle cycles without infinite loop', () => {
+            // Cycle: 0 -> 1 -> 2 -> 0
+            const graph = [[1], [2], [0]];
+            expect(dfsGraphRecursive(graph, 0)).toEqual([0, 1, 2]);
+            expect(dfsGraphIterative(graph, 0)).toEqual([0, 1, 2]);
+        });
+
+        it('should produce deterministic order for larger graph', () => {
+            // 0 -> 1 -> 2 -> 3, and 0 -> 3
+            const graph = [[1, 3], [2], [3], []];
+            expect(dfsGraphRecursive(graph, 0)).toEqual([0, 1, 2, 3]);
+            expect(dfsGraphIterative(graph, 0)).toEqual([0, 1, 2, 3]);
         });
     });
 });
