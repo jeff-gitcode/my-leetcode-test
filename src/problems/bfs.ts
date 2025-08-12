@@ -43,8 +43,10 @@ export function rightSideView(root: TreeNode | null): number[] {
  * @returns Minimum minutes for all oranges to rot, -1 if impossible
  */
 export function orangesRotting(grid: number[][]): number {
+    if (!grid || grid.length === 0 || grid[0].length === 0) return 0;
     const rows = grid.length;
     const cols = grid[0].length;
+
     const queue: [number, number][] = [];
     let freshOranges = 0;
 
