@@ -89,3 +89,18 @@ export function topKFrequent(nums: number[], k: number): number[] {
 
     return result;
 }
+
+export function findKthLargest(nums: number[], k: number): number {
+    const heap = new MinHeap();
+
+    for (const num of nums) {
+        heap.push([num, num]);
+        if (heap.size() > k) {
+            heap.pop();
+        }
+    }
+
+    // The root of the heap is the kth largest element
+    return heap.peek()[1];
+}
+
