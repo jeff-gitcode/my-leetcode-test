@@ -373,3 +373,55 @@ export function solve(board: string[][]): void {
         }
     }
 }
+
+/**
+ * Solution for "Word Search" - LeetCode #79
+ * 
+ * Problem: Given a 2D board and a word, return true if the word exists in the grid.
+ * The word can be constructed from letters of sequentially adjacent cells, where "adjacent" cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
+ * 
+ * Approach: DFS + Backtracking
+ * - For each cell, start DFS if it matches the first character
+ * - Mark visited cells temporarily
+ * - Backtrack if path does not lead to solution
+ * 
+ * Time Complexity: O(m * n * 4^L) where L is the length of the word
+ * Space Complexity: O(L) (call stack)
+ */
+export function exist(board: string[][], word: string): boolean {
+    const rows = board.length;
+    const cols = board[0].length;
+
+    const dfs = (r: number, c: number, idx: number): boolean => {
+        if (idx === word.length) return true;
+        if (
+            r < 0 || r >= rows ||
+            c < 0 || c >= cols ||
+            board[r][c] !== word[idx]
+        ) {
+            return false;
+        }
+
+        // Mark as visited
+        const temp = board[r][c];
+        board[r][c] = '#';
+
+        // Explore all 4 directions
+        const found = dfs(r + 1, c, idx + 1) ||
+            dfs(r - 1, c, idx + 1) ||
+            dfs(r, c + 1, idx + 1) ||
+            dfs(r, c - 1, idx + 1);
+
+        board[r][c] = temp; // Backtrack
+
+        return found;
+    };
+
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (dfs(r, c, 0)) return true;
+        }
+    }
+
+    return false;
+}

@@ -284,3 +284,31 @@ export function solve(board: string[][]): void {
         }
     }
 }
+
+
+/**
+ * Solution for "Subsets" - LeetCode #78
+ * 
+ * Problem: Given an array of distinct integers, return all possible subsets (the power set).
+ * 
+ * Approach: Backtracking
+ * - For each element, choose to include or exclude it recursively
+ * 
+ * Time Complexity: O(n * 2^n)
+ * Space Complexity: O(n * 2^n) (output)
+ */
+export function subsets(nums: number[]): number[][] {
+    const result: number[][] = [];
+
+    function backtrack(start: number, path: number[]) {
+        result.push([...path]);
+        for (let i = start; i < nums.length; i++) {
+            path.push(nums[i]);
+            backtrack(i + 1, path);
+            path.pop();
+        }
+    }
+
+    backtrack(0, []);
+    return result;
+}

@@ -213,3 +213,53 @@ export function exist(board: string[][], word: string): boolean {
 
     return false;
 }
+
+/**
+ * Solution for "N-Queens" - LeetCode #51
+ * 
+ * Problem: Place n queens on an n x n chessboard so that no two queens attack each other. Return all distinct solutions.
+ * 
+ * Approach: Backtracking
+ * - Try placing a queen in each row, check for column/diagonal conflicts
+ * - Use sets to track columns and diagonals
+ * 
+ * Time Complexity: O(n!)
+ * Space Complexity: O(n^2) (output)
+ */
+export function solveNQueens2(n: number): string[][] {
+    const result: string[][] = [];
+    const board: string[] = Array(n).fill('').map(() => '.'.repeat(n));
+    const cols = new Set<number>();
+    const diag1 = new Set<number>(); // row - col
+    const diag2 = new Set<number>(); // row + col
+
+    function backtrack(row: number) {
+        if (row === n) {
+            result.push([...board]);
+            return;
+        }
+        for (let col = 0; col < n; col++) {
+            if (cols.has(col) || diag1.has(row - col) || diag2.has(row + col)) continue;
+
+            // Place queen
+            const rowArr = board[row].split('');
+            rowArr[col] = 'Q';
+            board[row] = rowArr.join('');
+            cols.add(col);
+            diag1.add(row - col);
+            diag2.add(row + col);
+
+            backtrack(row + 1);
+
+            // Remove queen
+            rowArr[col] = '.';
+            board[row] = rowArr.join('');
+            cols.delete(col);
+            diag1.delete(row - col);
+            diag2.delete(row + col);
+        }
+    }
+
+    backtrack(0);
+    return result;
+}

@@ -87,3 +87,4 @@ export function findPeakElement(nums: number[]): number {
     }
     return left;
 }
+
