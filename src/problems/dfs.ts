@@ -322,3 +322,54 @@ export function dfsGraphIterative(graph: number[][], start: number): number[] {
 
     return order;
 }
+
+/**
+ * Solution for "Surrounded Regions" - LeetCode #130
+ * 
+ * Problem: Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
+ * A region is captured by flipping all 'O's into 'X's in that surrounded region.
+ * 
+ * Approach: DFS from border 'O's
+ * - Mark all 'O's connected to border as safe ('S')
+ * - Flip all remaining 'O's to 'X', then revert 'S' to 'O'
+ * 
+ * Time Complexity: O(m * n)
+ * Space Complexity: O(m * n)
+ */
+export function solve(board: string[][]): void {
+    if (!board || board.length === 0 || board[0].length === 0) return;
+
+    const rows = board.length;
+    const cols = board[0].length;
+
+    // DFS to mark safe 'O's
+    const dfs = (r: number, c: number): void => {
+        if (r < 0 || r >= rows || c < 0 || c >= cols || board[r][c] !== 'O') return;
+        board[r][c] = 'S'; // Mark as safe
+        dfs(r + 1, c);
+        dfs(r - 1, c);
+        dfs(r, c + 1);
+        dfs(r, c - 1);
+    };
+
+    // Mark border-connected 'O's
+    for (let r = 0; r < rows; r++) {
+        dfs(r, 0);
+        dfs(r, cols - 1);
+    }
+    for (let c = 0; c < cols; c++) {
+        dfs(0, c);
+        dfs(rows - 1, c);
+    }
+
+    // Flip surrounded 'O's to 'X', revert 'S' to 'O'
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (board[r][c] === 'O') {
+                board[r][c] = 'X';
+            } else if (board[r][c] === 'S') {
+                board[r][c] = 'O';
+            }
+        }
+    }
+}
