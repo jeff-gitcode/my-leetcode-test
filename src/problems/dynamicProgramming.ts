@@ -25,9 +25,15 @@ export function fib(n: number): number {
 }
 
 /**
- * Climbing Stairs - Count ways to reach top
- * @param n - Number of stairs
- * @returns Number of distinct ways to climb
+ * Solution for "Climbing Stairs" - LeetCode #70
+ * 
+ * Problem: Given n steps, each time you can climb 1 or 2 steps. How many distinct ways can you climb to the top?
+ * 
+ * Approach: Dynamic Programming
+ * - dp[i] = dp[i-1] + dp[i-2]
+ * 
+ * Time Complexity: O(n)
+ * Space Complexity: O(1)
  */
 export function climbStairs(n: number): number {
     if (n <= 2) return n;

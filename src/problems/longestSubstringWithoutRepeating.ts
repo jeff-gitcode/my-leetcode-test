@@ -15,21 +15,21 @@
 export function lengthOfLongestSubstring(s: string): number {
     if (s.length === 0) return 0;
 
-    const charMap = new Map<string, number>();
+    const map = new Map<string, number>();
     let left = 0;
-    let maxLength = 0;
+    let result = 0;
 
-    for (let right = 0; right < s.length; right++) {
-        const char = s[right];
+    for (let i = 0; i < s.length; i++) {
+        const current = s[i];
 
         // If character is already in current window, move left pointer
-        if (charMap.has(char) && charMap.get(char)! >= left) {
-            left = charMap.get(char)! + 1;
+        if (map.has(current) && map.get(current)! >= left) {
+            left = map.get(current)! + 1;
         }
 
-        charMap.set(char, right);
-        maxLength = Math.max(maxLength, right - left + 1);
+        map.set(current, i);
+        result = Math.max(result, i - left + 1);
     }
 
-    return maxLength;
+    return result;
 }

@@ -26,12 +26,12 @@ export function twoSum(numbers: number[], target: number): number[] {
     let right = numbers.length - 1;
 
     while (left < right) {
-        const currentSum = numbers[left] + numbers[right];
+        const sum = numbers[left] + numbers[right];
 
-        if (currentSum === target) {
+        if (sum === target) {
             // Return 1-indexed positions
             return [left + 1, right + 1];
-        } else if (currentSum < target) {
+        } else if (sum < target) {
             // Need larger sum, move left pointer right
             left++;
         } else {

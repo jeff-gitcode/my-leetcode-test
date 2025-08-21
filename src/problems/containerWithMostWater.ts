@@ -16,7 +16,7 @@
 export function maxArea(height: number[]): number {
     let left = 0;
     let right = height.length - 1;
-    let maxWater = 0;
+    let result = 0;
 
     while (left < right) {
         // Calculate current area
@@ -24,7 +24,7 @@ export function maxArea(height: number[]): number {
         const currentHeight = Math.min(height[left], height[right]);
         const currentArea = width * currentHeight;
 
-        maxWater = Math.max(maxWater, currentArea);
+        result = Math.max(result, currentArea);
 
         // Move the pointer with smaller height
         if (height[left] < height[right]) {
@@ -34,5 +34,5 @@ export function maxArea(height: number[]): number {
         }
     }
 
-    return maxWater;
+    return result;
 }

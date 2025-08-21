@@ -26,10 +26,10 @@ export function findMaxLength(nums: number[]): number {
     }
 
     // Use a map to store the first occurrence of each sum
-    const sumIndexMap = new Map<number, number>();
-    sumIndexMap.set(0, -1); // Initialize with sum 0 at index -1 (base case)
+    const map = new Map<number, number>();
+    map.set(0, -1); // Initialize with sum 0 at index -1 (base case)
 
-    let maxLength = 0;
+    let result = 0;
     let count = 0;  // Treat 0s as -1 and 1s as 1, so count tracks sum
 
     for (let i = 0; i < nums.length; i++) {
@@ -38,13 +38,13 @@ export function findMaxLength(nums: number[]): number {
 
         // If we've seen this count before, it means the subarray between
         // the first occurrence and current index has equal 0s and 1s
-        if (sumIndexMap.has(count)) {
-            maxLength = Math.max(maxLength, i - sumIndexMap.get(count)!);
+        if (map.has(count)) {
+            result = Math.max(result, i - map.get(count)!);
         } else {
             // Store the first index where we see this count
-            sumIndexMap.set(count, i);
+            map.set(count, i);
         }
     }
 
-    return maxLength;
+    return result;
 }
