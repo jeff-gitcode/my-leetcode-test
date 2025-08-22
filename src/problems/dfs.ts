@@ -76,7 +76,7 @@ export function numIslands(grid: string[][]): number {
 
     const rows = grid.length;
     const cols = grid[0].length;
-    let islands = 0;
+    let result = 0;
 
     const dfs = (row: number, col: number): void => {
         // Base case: out of bounds or water
@@ -97,13 +97,13 @@ export function numIslands(grid: string[][]): number {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             if (grid[row][col] === '1') {
-                islands++;
+                result++;
                 dfs(row, col); // Mark entire island as visited
             }
         }
     }
 
-    return islands;
+    return result;
 }
 
 /**

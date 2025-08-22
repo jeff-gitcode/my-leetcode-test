@@ -64,15 +64,76 @@ class MinHeap {
     }
 }
 
+/**
+ * Solution for "Kth Largest Element in an Array" - LeetCode #215
+ * 
+ * Problem: Find the kth largest element in an unsorted array.
+ * 
+ * Approach: Min Heap or Quickselect (here: Min Heap)
+ * 
+ * Time Complexity: O(n log k)
+ * Space Complexity: O(k)
+ */
 export function findKthLargest(nums: number[], k: number): number {
-    const minHeap = new MinHeap();
-
+    const heap: number[] = [];
     for (const num of nums) {
-        minHeap.push(num);
-        if (minHeap.size() > k) {
-            minHeap.pop();
+        heap.push(num);
+        heap.sort((a, b) => a - b);
+        if (heap.length > k) heap.shift();
+    }
+    return heap[0];
+}
+
+/**
+ * Solution for "Top K Frequent Elements" - LeetCode #347
+ * 
+ * Problem: Given an array of integers, return the k most frequent elements.
+ * 
+ * Approach: HashMap + Min Heap
+ * 
+ * Time Complexity: O(n log k)
+ * Space Complexity: O(n)
+ */
+export function topKFrequent(nums: number[], k: number): number[] {
+    const freq = new Map<number, number>();
+    for (const num of nums) {
+        freq.set(num, (freq.get(num) || 0) + 1);
+    }
+    const heap: [number, number][] = [];
+    for (const [num, count] of freq.entries()) {
+        heap.push([count, num]);
+        heap.sort((a, b) => a[0] - b[0]);
+        if (heap.length > k) heap.shift();
+    }
+    return heap.map(item => item[1]);
+}
+
+/**
+ * Solution for "Kth Largest Element in a Stream" - LeetCode #703
+ * 
+ * Problem: Design a class to find the kth largest element in a stream.
+ * 
+ * Approach: Min Heap
+ * 
+ * Time Complexity: O(log k) per add
+ * Space Complexity: O(k)
+ */
+export class KthLargest {
+    private heap: number[];
+    private k: number;
+
+    constructor(k: number, nums: number[]) {
+        this.k = k;
+        this.heap = [];
+        for (const num of nums) {
+            this.add(num);
         }
     }
 
-    return minHeap.peek();
+    add(val: number): number {
+        this.heap.push(val);
+        this.heap.sort((a, b) => a - b);
+        if (this.heap.length > this.k) this.heap.shift();
+        return this.heap[0];
+    }
 }
