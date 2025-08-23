@@ -78,6 +78,7 @@ export function numIslands(grid: string[][]): number {
     const cols = grid[0].length;
     let result = 0;
 
+    // DFS to mark all connected land as visited
     const dfs = (row: number, col: number): void => {
         // Base case: out of bounds or water
         if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] === '0') {
@@ -94,6 +95,7 @@ export function numIslands(grid: string[][]): number {
         dfs(row, col - 1); // Left
     };
 
+    // Iterate through grid, start DFS for each unvisited land cell
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             if (grid[row][col] === '1') {
@@ -424,4 +426,64 @@ export function exist(board: string[][], word: string): boolean {
     }
 
     return false;
+}
+
+/**
+ * Solution for "Number of Islands" - LeetCode #200
+ * 
+ * Problem: Given a 2D grid of '1's (land) and '0's (water), count the number of islands.
+ * An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.
+ * 
+ * Approach: DFS
+ * - For each cell, start DFS if it's land ('1'), marking all connected land as visited ('0').
+ * - Count each DFS call as a separate island.
+ * 
+ * Time Complexity: O(m * n)
+ * Space Complexity: O(m * n) (call stack)
+ * 
+ * Example:
+ * Input:
+ * [
+ *   ['1','1','0','0','0'],
+ *   ['1','1','0','0','0'],
+ *   ['0','0','1','0','0'],
+ *   ['0','0','0','1','1']
+ * ]
+ * Output: 3
+ */
+export function numIslands2(grid: string[][]): number {
+    if (!grid || grid.length === 0) return 0;
+
+    const rows = grid.length;
+    const cols = grid[0].length;
+    let result = 0;
+
+    // DFS to mark all connected land as visited
+    const dfs = (row: number, col: number): void => {
+        // Base case: out of bounds or water
+        if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] === '0') {
+            return;
+        }
+
+        // Mark current cell as visited
+        grid[row][col] = '0';
+
+        // Explore all 4 directions
+        dfs(row + 1, col); // Down
+        dfs(row - 1, col); // Up
+        dfs(row, col + 1); // Right
+        dfs(row, col - 1); // Left
+    };
+
+    // Iterate through grid, start DFS for each unvisited land cell
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            if (grid[row][col] === '1') {
+                result++;
+                dfs(row, col); // Mark entire island as visited
+            }
+        }
+    }
+
+    return result;
 }

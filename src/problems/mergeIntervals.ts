@@ -12,6 +12,21 @@
  * Space Complexity: O(1) excluding output
  */
 
+/**
+ * Merges overlapping intervals in a list.
+ * 
+ * @param nums - Array of intervals [start, end]
+ * @returns Array of merged intervals
+ * 
+ * Steps:
+ * 1. Sort intervals by start time.
+ * 2. Iterate through intervals, merging if overlapping.
+ * 3. Add non-overlapping intervals to result.
+ * 
+ * Example:
+ * Input: [[1,3],[2,6],[8,10],[15,18]]
+ * Output: [[1,6],[8,10],[15,18]]
+ */
 export function merge(nums: number[][]): number[][] {
     if (nums.length <= 1) return nums;
 
@@ -25,7 +40,7 @@ export function merge(nums: number[][]): number[][] {
         const lastMerged = result[result.length - 1];
 
         if (current[0] <= lastMerged[1]) {
-            // Overlapping intervals, merge them
+            // Overlapping intervals, merge them by updating the end
             lastMerged[1] = Math.max(lastMerged[1], current[1]);
         } else {
             // Non-overlapping interval, add to result

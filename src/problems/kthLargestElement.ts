@@ -90,21 +90,30 @@ export function findKthLargest(nums: number[], k: number): number {
  * Problem: Given an array of integers, return the k most frequent elements.
  * 
  * Approach: HashMap + Min Heap
+ * - Count the frequency of each element using a map.
+ * - Use a min heap to keep track of the top k frequent elements.
+ * - If the heap size exceeds k, remove the element with the lowest frequency.
+ * - At the end, extract the elements from the heap.
  * 
  * Time Complexity: O(n log k)
  * Space Complexity: O(n)
  */
 export function topKFrequent(nums: number[], k: number): number[] {
+    // Count frequencies of each number
     const freq = new Map<number, number>();
     for (const num of nums) {
         freq.set(num, (freq.get(num) || 0) + 1);
     }
+
+    // Min heap to keep top k frequent elements: [frequency, number]
     const heap: [number, number][] = [];
     for (const [num, count] of freq.entries()) {
         heap.push([count, num]);
-        heap.sort((a, b) => a[0] - b[0]);
-        if (heap.length > k) heap.shift();
+        heap.sort((a, b) => a[0] - b[0]); // Sort by frequency (min heap)
+        if (heap.length > k) heap.shift(); // Remove lowest frequency if heap too big
     }
+
+    // Extract numbers from heap
     return heap.map(item => item[1]);
 }
 
