@@ -11,52 +11,66 @@
  * 
  * Time Complexity: O(|s| + |t|)
  * Space Complexity: O(|s| + |t|)
+ * 
+ * Example:
+ * Input: s = "ADOBECODEBANC", t = "ABC"
+ * Output: "BANC"
+ * Explanation: The minimum window substring is "BANC".
  */
 
 export function minWindow(s: string, t: string): string {
+    // If s is shorter than t, it's impossible to find a valid window
     if (s.length < t.length) return "";
 
-    // Count characters in t
-    const tCount = new Map<string, number>();
+    // Create a map to count each character's frequency in t
+    const need = new Map<string, number>();
     for (const char of t) {
-        tCount.set(char, (tCount.get(char) || 0) + 1);
+        // Increment the count for each character in t
+        need.set(char, (need.get(char) || 0) + 1);
     }
 
-    const windowCount = new Map<string, number>();
-    let left = 0;
-    let minLen = Infinity;
-    let minStart = 0;
-    let formed = 0; // Number of unique characters in window with desired frequency
-    const required = tCount.size;
+    // Map to keep track of character counts in the current window of s
+    const window = new Map<string, number>();
+    let left = 0; // Left pointer for the window
+    let minLen = Infinity; // Track the minimum window length found
+    let minStart = 0; // Track the starting index of the minimum window
+    let formed = 0; // Number of unique characters in window with required frequency
+    const required = need.size; // Total unique characters needed
 
+    // Expand the window by moving the right pointer
     for (let right = 0; right < s.length; right++) {
-        const char = s[right];
-        windowCount.set(char, (windowCount.get(char) || 0) + 1);
+        const char = s[right]; // Current character at right pointer
+        // Add current character to window count
+        window.set(char, (window.get(char) || 0) + 1);
 
-        // Check if current character's frequency matches required frequency
-        if (tCount.has(char) && windowCount.get(char) === tCount.get(char)) {
+        // If character's count matches what's required in t, increment formed
+        if (need.has(char) && window.get(char) === need.get(char)) {
             formed++;
         }
 
-        // Contract window while it's valid
+        // Try to contract the window from the left while it's valid
         while (left <= right && formed === required) {
-            const currentLen = right - left + 1;
+            const currentLen = right - left + 1; // Current window length
+            // Update minimum window if current is smaller
             if (currentLen < minLen) {
                 minLen = currentLen;
                 minStart = left;
             }
 
-            const leftChar = s[left];
-            windowCount.set(leftChar, windowCount.get(leftChar)! - 1);
+            const leftChar = s[left]; // Character at left pointer
+            // Remove leftChar from window count as window contracts
+            window.set(leftChar, window.get(leftChar)! - 1);
 
-            if (tCount.has(leftChar) && windowCount.get(leftChar)! < tCount.get(leftChar)!) {
+            // If removing leftChar makes window invalid, decrement formed
+            if (need.has(leftChar) && window.get(leftChar)! < need.get(leftChar)!) {
                 formed--;
             }
 
-            left++;
+            left++; // Move left pointer to contract window
         }
     }
 
+    // If no valid window found, return ""; otherwise, return substring
     return minLen === Infinity ? "" : s.substring(minStart, minStart + minLen);
 }
 
@@ -65,11 +79,18 @@ export function minWindow(s: string, t: string): string {
  * 
  * Problem: Given two strings s and t, return the minimum window in s which contains all the characters of t.
  * 
- * Approach: Sliding Window + HashMap
- * - Expand window to include all chars, contract to minimize
+ * Approach: Sliding Window + Hash Map
+ * - Use two pointers to expand and contract the window.
+ * - Track required characters and their counts.
+ * - Move right pointer to expand, left pointer to contract when all requirements are met.
  * 
- * Time Complexity: O(n)
- * Space Complexity: O(k)
+ * Time Complexity: O(|s| + |t|)
+ * Space Complexity: O(|t|)
+ * 
+ * Example:
+ * Input: s = "ADOBECODEBANC", t = "ABC"
+ * Output: "BANC"
+ * Explanation: The minimum window substring is "BANC".
  */
 export function minWindow2(s: string, t: string): string {
     if (t.length === 0) return "";

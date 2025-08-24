@@ -13,8 +13,12 @@
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: numbers = [2,7,11,15], target = 9
+ * Output: [1,2]
+ * Explanation: 2 + 7 = 9, indices are 1-based.
  */
-
 /**
  * Finds two numbers in a sorted array that add up to target
  * @param numbers - Sorted array of integers (1-indexed)
@@ -22,24 +26,19 @@
  * @returns Array containing 1-indexed positions of the two numbers
  */
 export function twoSum(numbers: number[], target: number): number[] {
-    let left = 0;
-    let right = numbers.length - 1;
+    let left = 0; // Left pointer at start
+    let right = numbers.length - 1; // Right pointer at end
 
     while (left < right) {
-        const sum = numbers[left] + numbers[right];
-
+        const sum = numbers[left] + numbers[right]; // Sum of two pointers
         if (sum === target) {
-            // Return 1-indexed positions
-            return [left + 1, right + 1];
+            return [left + 1, right + 1]; // Return 1-based indices
         } else if (sum < target) {
-            // Need larger sum, move left pointer right
-            left++;
+            left++; // Move left pointer right if sum is too small
         } else {
-            // Need smaller sum, move right pointer left
-            right--;
+            right--; // Move right pointer left if sum is too large
         }
     }
 
-    // Should never reach here based on problem constraints
-    return [];
+    return []; // No solution found
 }

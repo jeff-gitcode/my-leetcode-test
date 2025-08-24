@@ -1,32 +1,35 @@
 /**
- * Solution for the "Maximum Average Subarray I" problem
+ * Solution for "Maximum Average Subarray I" - LeetCode #643
  * 
- * Problem: Given an array consisting of n integers, find the contiguous subarray 
- * of given length k that has the maximum average value.
+ * Problem: Given an array nums and an integer k, find the maximum average value of any contiguous subarray of length k.
  * 
  * Approach: Sliding Window
- * - Calculate sum of first k elements
- * - Slide the window by removing leftmost and adding rightmost element
- * - Track maximum sum and convert to average
+ * - Calculate sum of first k elements.
+ * - Slide window, updating sum and tracking maximum.
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: nums = [1,12,-5,-6,50,3], k = 4
+ * Output: 12.75
+ * Explanation: Maximum average is (12 + -5 + -6 + 50) / 4 = 12.75
  */
 
-export function findMaxAverage(nums: number[], k: number): number {
+export function findMaxAverage(nums: number[], k: number): number { // Defines a function that finds the maximum average of any subarray of length k in nums.
     // Calculate sum of first k elements
-    let currentSum = 0;
-    for (let i = 0; i < k; i++) {
-        currentSum += nums[i];
+    let currentSum = 0; // Initializes a variable to store the sum of the current window of k elements.
+    for (let i = 0; i < k; i++) { // Loops through the first k elements of nums.
+        currentSum += nums[i]; // Adds each of the first k elements to currentSum.
     }
 
-    let maxSum = currentSum;
+    let maxSum = currentSum; // Sets maxSum to the sum of the first window as the initial maximum.
 
     // Slide the window
-    for (let i = k; i < nums.length; i++) {
-        currentSum = currentSum - nums[i - k] + nums[i];
-        maxSum = Math.max(maxSum, currentSum);
+    for (let i = k; i < nums.length; i++) { // Loops from the k-th element to the end of nums.
+        currentSum = currentSum - nums[i - k] + nums[i]; // Updates currentSum by removing the element that is sliding out and adding the new element.
+        maxSum = Math.max(maxSum, currentSum); // Updates maxSum if the new currentSum is greater.
     }
 
-    return maxSum / k;
+    return maxSum / k; // Returns the maximum average by dividing maxSum by k.
 }

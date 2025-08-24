@@ -22,24 +22,34 @@
  */
 
 export function lengthOfLongestSubstring(s: string): number {
+    // If the input string is empty, return 0 (no substring exists)
     if (s.length === 0) return 0;
 
+    // Map to store the last seen index of each character
     const map = new Map<string, number>();
+    // Left pointer for the sliding window
     let left = 0;
+    // Variable to store the maximum length found
     let result = 0;
 
+    // Iterate through each character in the string
     for (let i = 0; i < s.length; i++) {
+        // Current character at index i
         const current = s[i];
 
-        // If character is already in current window, move left pointer
+        // If character is already in the current window, move left pointer
+        // past the previous occurrence of the character
         if (map.has(current) && map.get(current)! >= left) {
             left = map.get(current)! + 1;
         }
 
+        // Update the map with the current character's latest index
         map.set(current, i);
+        // Update the result with the maximum window size found so far
         result = Math.max(result, i - left + 1);
     }
 
+    // Return the maximum length of substring without repeating characters
     return result;
 }
 
