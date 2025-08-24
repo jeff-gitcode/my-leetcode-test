@@ -109,10 +109,26 @@ export function numIslands(grid: string[][]): number {
 }
 
 /**
- * Course Schedule (Cycle Detection in Directed Graph)
- * @param numCourses - Number of courses
- * @param prerequisites - Array of prerequisite pairs [course, prerequisite]
- * @returns True if all courses can be finished, false otherwise
+ * Solution for "Course Schedule" - LeetCode #207
+ * 
+ * Problem: Given the number of courses and a list of prerequisite pairs, determine if you can finish all courses.
+ * 
+ * Approach: DFS Cycle Detection
+ * - Build a directed graph from prerequisites.
+ * - Use DFS to detect cycles (if a cycle exists, it's impossible to finish all courses).
+ * - Mark nodes as unvisited (0), visiting (1), or visited (2).
+ * 
+ * Time Complexity: O(V + E)
+ * Space Complexity: O(V)
+ * 
+ * Example:
+ * Input: numCourses = 2, prerequisites = [[1,0]]
+ * Output: true
+ * Explanation: Take course 0 first, then course 1.
+ * 
+ * Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+ * Output: false
+ * Explanation: Cycle exists, cannot finish all courses.
  */
 export function canFinish(numCourses: number, prerequisites: number[][]): boolean {
     // Build adjacency list
@@ -161,9 +177,20 @@ export class GraphNode {
 }
 
 /**
- * Clone Graph - Deep clone an undirected graph
- * @param node - Starting node of the graph
- * @returns Deep copy of the graph starting from given node
+ * Solution for "Clone Graph" - LeetCode #133
+ * 
+ * Problem: Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph.
+ * 
+ * Approach: DFS with HashMap
+ * - Use a map to track already cloned nodes to avoid cycles and duplicate nodes.
+ * - Recursively clone each node and its neighbors.
+ * 
+ * Time Complexity: O(N) where N is the number of nodes
+ * Space Complexity: O(N) (for visited map and recursion stack)
+ * 
+ * Example:
+ * Input: Node 1 with neighbors [2,4], Node 2 with neighbors [1,3], Node 3 with neighbors [2,4], Node 4 with neighbors [1,3]
+ * Output: Deep copy of the graph with same structure and values.
  */
 export function cloneGraph(node: GraphNode | null): GraphNode | null {
     if (!node) return null;

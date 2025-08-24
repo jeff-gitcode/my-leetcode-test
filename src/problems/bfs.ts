@@ -151,31 +151,50 @@ export function orangesRotting2(grid: number[][]): number {
 }
 
 /**
- * Word Ladder - Minimum transformations to reach target word
- * @param beginWord - Starting word
- * @param endWord - Target word
- * @param wordList - List of valid words
- * @returns Minimum number of transformations, 0 if impossible
+ * Solution for "Word Ladder" - LeetCode #127
+ * 
+ * Problem: Given two words (beginWord and endWord), and a word list, find the length of shortest transformation sequence from beginWord to endWord, such that:
+ * - Only one letter can be changed at a time.
+ * - Each transformed word must exist in the word list.
+ * 
+ * Approach: BFS (Breadth-First Search)
+ * - Use a queue to explore all possible transformations level by level.
+ * - For each word, try changing each character to all possible letters.
+ * - Track visited words to avoid cycles.
+ * 
+ * Time Complexity: O(N * L * 26), where N is the number of words and L is the length of each word.
+ * Space Complexity: O(N)
+ * 
+ * Example:
+ * Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+ * Output: 5
+ * Explanation: "hit" -> "hot" -> "dot" -> "dog" -> "cog"
  */
 export function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
+    // Convert wordList to a set for O(1) lookups
     const wordSet = new Set(wordList);
-    if (!wordSet.has(endWord)) return 0;
+    if (!wordSet.has(endWord)) return 0; // If endWord is not in wordList, no solution
 
+    // Queue for BFS: [currentWord, currentLevel]
     const queue: [string, number][] = [[beginWord, 1]];
+    // Set to track visited words and avoid cycles
     const visited = new Set<string>();
     visited.add(beginWord);
 
     while (queue.length > 0) {
         const [word, level] = queue.shift()!;
 
+        // If we reach the endWord, return the current transformation length
         if (word === endWord) return level;
 
-        // Try changing each character
+        // Try changing each character in the word to every letter from 'a' to 'z'
         for (let i = 0; i < word.length; i++) {
             for (let c = 0; c < 26; c++) {
                 const char = String.fromCharCode(97 + c); // 'a' to 'z'
+                // Form a new word by replacing the i-th character
                 const newWord = word.slice(0, i) + char + word.slice(i + 1);
 
+                // If newWord is in wordSet and not visited, add to queue
                 if (wordSet.has(newWord) && !visited.has(newWord)) {
                     visited.add(newWord);
                     queue.push([newWord, level + 1]);

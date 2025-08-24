@@ -69,10 +69,18 @@ class MinHeap {
  * 
  * Problem: Find the kth largest element in an unsorted array.
  * 
- * Approach: Min Heap or Quickselect (here: Min Heap)
+ * Approach: Min Heap
+ * - Maintain a min heap of size k.
+ * - Iterate through the array, keeping only the k largest elements in the heap.
+ * - The root of the heap is the kth largest element.
  * 
  * Time Complexity: O(n log k)
  * Space Complexity: O(k)
+ * 
+ * Example:
+ * Input: nums = [3,2,1,5,6,4], k = 2
+ * Output: 5
+ * Explanation: The 2nd largest element is 5.
  */
 export function findKthLargest(nums: number[], k: number): number {
     const heap: number[] = [];

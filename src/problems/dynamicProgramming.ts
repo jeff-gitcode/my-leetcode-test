@@ -72,10 +72,21 @@ export function rob(nums: number[]): number {
 }
 
 /**
- * Coin Change - Minimum coins to make amount
- * @param coins - Array of coin denominations
- * @param amount - Target amount
- * @returns Minimum number of coins, -1 if impossible
+ * Solution for "Coin Change" - LeetCode #322
+ * 
+ * Problem: Given an array of coin denominations and a target amount, find the minimum number of coins needed to make up that amount. If it's not possible, return -1.
+ * 
+ * Approach: Dynamic Programming
+ * - dp[i] = minimum coins needed to make amount i
+ * - For each amount from 1 to target, try every coin and update dp[i]
+ * 
+ * Time Complexity: O(amount * coins.length)
+ * Space Complexity: O(amount)
+ * 
+ * Example:
+ * Input: coins = [1, 2, 5], amount = 11
+ * Output: 3
+ * Explanation: 11 = 5 + 5 + 1
  */
 export function coinChange(coins: number[], amount: number): number {
     // dp[i] = minimum coins needed to make amount i
@@ -90,13 +101,26 @@ export function coinChange(coins: number[], amount: number): number {
         }
     }
 
+    // If dp[amount] is still Infinity, it's not possible to make up the amount
     return dp[amount] === Infinity ? -1 : dp[amount];
 }
 
 /**
- * Longest Increasing Subsequence
- * @param nums - Array of integers
- * @returns Length of longest strictly increasing subsequence
+ * Solution for "Longest Increasing Subsequence" - LeetCode #300
+ * 
+ * Problem: Given an array of integers, find the length of the longest strictly increasing subsequence.
+ * 
+ * Approach: Dynamic Programming
+ * - dp[i] = length of LIS ending at index i
+ * - For each i, check all j < i and update dp[i] if nums[j] < nums[i]
+ * 
+ * Time Complexity: O(n^2)
+ * Space Complexity: O(n)
+ * 
+ * Example:
+ * Input: nums = [10,9,2,5,3,7,101,18]
+ * Output: 4
+ * Explanation: The longest increasing subsequence is [2,3,7,101], length 4.
  */
 export function lengthOfLIS(nums: number[]): number {
     if (nums.length === 0) return 0;
@@ -112,6 +136,7 @@ export function lengthOfLIS(nums: number[]): number {
         }
     }
 
+    // The answer is the maximum value in dp
     return Math.max(...dp);
 }
 

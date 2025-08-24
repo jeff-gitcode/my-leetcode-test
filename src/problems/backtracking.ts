@@ -1,14 +1,18 @@
 /**
- * Backtracking implementations
+ * Solution for "Permutations" - LeetCode #46
  * 
- * Pattern: Build solution incrementally and backtrack when constraints violated
- * Applications: Permutations, combinations, constraint satisfaction problems
- */
-
-/**
- * Generate all permutations of distinct integers
- * @param nums - Array of distinct integers
- * @returns All possible permutations
+ * Problem: Given an array of distinct integers, return all possible permutations.
+ * 
+ * Approach: Backtracking
+ * - Build permutations by choosing unused numbers recursively.
+ * - Backtrack after each choice to explore all possibilities.
+ * 
+ * Time Complexity: O(n!)
+ * Space Complexity: O(n * n!) (output)
+ * 
+ * Example:
+ * Input: nums = [1,2,3]
+ * Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
  */
 export function permute(nums: number[]): number[][] {
     const result: number[][] = [];
@@ -63,9 +67,20 @@ export function combine(n: number, k: number): number[][] {
 }
 
 /**
- * Generate all subsets (power set)
- * @param nums - Array of unique integers
- * @returns All possible subsets
+ * Solution for "Subsets" - LeetCode #78
+ * 
+ * Problem: Given an array of unique integers, return all possible subsets (the power set).
+ * 
+ * Approach: Backtracking
+ * - For each element, choose to include or exclude it recursively.
+ * - Add each subset to the result as you build it.
+ * 
+ * Time Complexity: O(n * 2^n)
+ * Space Complexity: O(n * 2^n) (output)
+ * 
+ * Example:
+ * Input: nums = [1,2,3]
+ * Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
  */
 export function subsets(nums: number[]): number[][] {
     const result: number[][] = [];
@@ -120,6 +135,41 @@ export function letterCombinations(digits: string): string[] {
 }
 
 /**
+ * Solution for "Valid Parentheses" - LeetCode #20
+ * 
+ * Problem: Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+ * A string is valid if:
+ * - Open brackets are closed by the same type of brackets.
+ * - Open brackets are closed in the correct order.
+ * 
+ * Approach: Stack
+ * - Push opening brackets onto the stack.
+ * - For each closing bracket, check if it matches the top of the stack.
+ * 
+ * Time Complexity: O(n)
+ * Space Complexity: O(n)
+ * 
+ * Example:
+ * Input: s = "()[]{}"
+ * Output: true
+ * 
+ * Input: s = "(]"
+ * Output: false
+ */
+export function isValid(s: string): boolean {
+    const stack: string[] = [];
+    const map: Record<string, string> = { ')': '(', '}': '{', ']': '[' };
+    for (const c of s) {
+        if (c === '(' || c === '{' || c === '[') {
+            stack.push(c);
+        } else {
+            if (stack.pop() !== map[c]) return false;
+        }
+    }
+    return stack.length === 0;
+}
+
+/**
  * N-Queens problem - Place n queens on nxn chessboard
  * @param n - Size of chessboard and number of queens
  * @returns All valid arrangements
@@ -169,10 +219,27 @@ export function solveNQueens(n: number): string[][] {
 }
 
 /**
- * Word Search - Find if word exists in 2D board
- * @param board - 2D board of characters
- * @param word - Word to search for
- * @returns True if word exists, false otherwise
+ * Solution for "Word Search" - LeetCode #79
+ * 
+ * Problem: Given a 2D board and a word, find if the word exists in the grid.
+ * The word can be constructed from letters of sequentially adjacent cells, where "adjacent" cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.
+ * 
+ * Approach: Backtracking
+ * - For each cell, start DFS if it matches the first character.
+ * - Mark visited cells to avoid revisiting in the same path.
+ * - Explore all 4 directions recursively.
+ * 
+ * Time Complexity: O(m * n * 4^L), where m and n are board dimensions and L is word length.
+ * Space Complexity: O(L) (recursion stack)
+ * 
+ * Example:
+ * Input: board = [
+ *   ['A','B','C','E'],
+ *   ['S','F','C','S'],
+ *   ['A','D','E','E']
+ * ], word = "ABCCED"
+ * Output: true
+ * Explanation: The word "ABCCED" can be constructed as A->B->C->C->E->D.
  */
 export function exist(board: string[][], word: string): boolean {
     const rows = board.length;

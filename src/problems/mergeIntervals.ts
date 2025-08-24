@@ -120,17 +120,31 @@ export function insert(nums: number[][], newNums: number[]): number[][] {
  * Problem: Given an array of meeting time intervals, determine if a person could attend all meetings.
  * 
  * Approach: Sort + Check Overlap
- * - Sort intervals by start, check for overlap
+ * - Sort intervals by start time.
+ * - Check if any meeting overlaps with the previous one.
+ * - If any overlap exists, return false; otherwise, return true.
  * 
- * Time Complexity: O(n log n)
+ * Time Complexity: O(n log n) (due to sorting)
  * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: [[0,30],[5,10],[15,20]]
+ * Output: false
+ * Explanation: The first meeting [0,30] overlaps with [5,10] and [15,20].
+ * 
+ * Input: [[7,10],[2,4]]
+ * Output: true
+ * Explanation: No meetings overlap.
  */
 export function canAttendMeetings(nums: number[][]): boolean {
     nums.sort((a, b) => a[0] - b[0]);
     for (let i = 1; i < nums.length; i++) {
         if (nums[i][0] < nums[i - 1][1]) {
+            // Overlap detected, cannot attend all meetings
             return false;
         }
     }
+
+    // No overlaps, can attend all meetings
     return true;
 }
