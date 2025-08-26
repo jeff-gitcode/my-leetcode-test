@@ -281,10 +281,92 @@ The core algorithmic patterns have been implemented! To complete the study proje
 
 ## 🔗 Useful Links
 
+### 15 LeetCode Patterns with Example Problems
+
+Based on your workspace, here are the 15 core coding patterns with 3 representative LeetCode problems for each, including problem numbers:
+
+1. **Prefix Sum**
+   - #303 Range Sum Query - Immutable (Easy)
+   - #525 Contiguous Array (Medium)
+   - #560 Subarray Sum Equals K (Medium)
+
+2. **Two Pointers**
+   - #167 Two Sum II - Input Array Is Sorted (Medium)
+   - #15 3Sum (Medium) - Implemented in threeSum.ts
+   - #11 Container With Most Water (Medium)
+
+3. **Sliding Window**
+   - #643 Maximum Average Subarray I (Easy)
+   - #3 Longest Substring Without Repeating Characters (Medium)
+   - #76 Minimum Window Substring (Hard)
+
+4. **Fast & Slow Pointers**
+   - #141 Linked List Cycle (Easy)
+   - #202 Happy Number (Easy) - Implemented in happyNumber.ts
+   - #287 Find the Duplicate Number (Medium)
+
+5. **LinkedList In-place Reversal**
+   - #206 Reverse Linked List (Easy)
+   - #92 Reverse Linked List II (Medium)
+   - #24 Swap Nodes in Pairs (Medium)
+
+6. **Binary Search**
+   - #704 Binary Search (Easy)
+   - #33 Search in Rotated Sorted Array (Medium)
+   - #153 Find Minimum in Rotated Sorted Array (Medium)
+
+7. **Backtracking**
+   - #46 Permutations (Medium) - Implemented in backtracking.ts
+   - #78 Subsets (Medium)
+   - #51 N-Queens (Hard)
+
+8. **Dynamic Programming**
+   - #70 Climbing Stairs (Easy)
+   - #300 Longest Increasing Subsequence (Medium)
+   - #322 Coin Change (Medium)
+
+9. **Monotonic Stack**
+   - #496 Next Greater Element I (Easy)
+   - #739 Daily Temperatures (Medium)
+   - #84 Largest Rectangle in Histogram (Hard)
+
+10. **Top 'K' Elements**
+    - #215 Kth Largest Element in an Array (Medium)
+    - #347 Top K Frequent Elements (Medium) - Implemented in topKFrequentElements.ts
+    - #373 Find K Pairs with Smallest Sums (Medium)
+
+11. **Overlapping Intervals**
+    - #56 Merge Intervals (Medium)
+    - #57 Insert Interval (Medium)
+    - #435 Non-overlapping Intervals (Medium)
+
+12. **Depth-First Search (DFS)**
+    - #104 Maximum Depth of Binary Tree (Easy)
+    - #112 Path Sum (Easy)
+    - #133 Clone Graph (Medium) - Implemented in dfs.ts
+
+13. **Breadth-First Search (BFS)**
+    - #102 Binary Tree Level Order Traversal (Medium)
+    - #994 Rotting Oranges (Medium)
+    - #127 Word Ladder (Hard)
+
+14. **Matrix Traversal**
+    - #54 Spiral Matrix (Medium)
+    - #48 Rotate Image (Medium)
+    - #73 Set Matrix Zeroes (Medium)
+
+15. **Bit Manipulation**
+    - #136 Single Number (Easy)
+    - #338 Counting Bits (Easy)
+    - #201 Bitwise AND of Numbers Range (Medium)
+
+Each pattern represents a fundamental problem-solving approach that can be applied to various algorithm challenges. Your workspace already has implementations for several of these patterns, showing good progress in your study project.
+
 ### To-Do List Tracker
+
 Here is a to-do list tracker for the Leetcode problems:
 
-- [Range Sum Query - Immutable - LeetCode](https://leetcode.com/problems/range-sum-query-immutable/) (Not started, Easy, Prefix Sum)
+- [Range Sum Query - Immutable](https://leetcode.com/problems/range-sum-query-immutable/) (Not started, Easy, Prefix Sum)
 - [Contiguous Array - LeetCode](https://leetcode.com/problems/contiguous-array/) (Not started, Medium, Prefix Sum)
 - [Subarray Sum Equals K - LeetCode](https://leetcode.com/problems/subarray-sum-equals-k/) (Not started, Medium, Prefix Sum)
 - [Two Sum II - Input Array Is Sorted - LeetCode](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) (Not started, Medium, Two Pointers)
