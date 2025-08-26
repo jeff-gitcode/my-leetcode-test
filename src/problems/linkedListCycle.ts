@@ -1,41 +1,45 @@
 /**
- * Solution for the "Linked List Cycle" problem
+ * Solution for "Linked List Cycle" - LeetCode #141
  * 
  * Problem: Given head of a linked list, determine if the linked list has a cycle.
  * 
  * Approach: Fast & Slow Pointers (Floyd's Cycle Detection)
  * - Use two pointers moving at different speeds
- * - If there's a cycle, fast pointer will eventually meet slow pointer
+ * - If there's a cycle, fast pointer will eventually catch up to slow pointer
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: head = [3,2,0,-4], pos = 1 (pos indicates where tail connects)
+ * Output: true
+ * Explanation: There is a cycle in the linked list where the tail connects to node at position 1.
  */
-
 export class ListNode {
-    val: number;
-    next: ListNode | null;
+    val: number;                     // Value stored in the node
+    next: ListNode | null;           // Reference to the next node or null if it's the end
     constructor(val?: number, next?: ListNode | null) {
-        this.val = (val === undefined ? 0 : val);
-        this.next = (next === undefined ? null : next);
+        this.val = (val === undefined ? 0 : val);          // Default value is 0
+        this.next = (next === undefined ? null : next);    // Default next is null
     }
 }
 
 export function hasCycle(head: ListNode | null): boolean {
-    if (!head || !head.next) return false;
+    if (!head || !head.next) return false;    // If list is empty or has only one node, no cycle possible
 
-    let slow: ListNode | null = head;
-    let fast: ListNode | null = head;
+    let slow: ListNode | null = head;         // Slow pointer starts at head
+    let fast: ListNode | null = head;         // Fast pointer also starts at head
 
-    while (fast && fast.next) {
-        slow = slow!.next;
-        fast = fast.next.next;
+    while (fast && fast.next) {               // Continue until fast reaches end (null)
+        slow = slow!.next;                    // Move slow pointer one step
+        fast = fast.next.next;                // Move fast pointer two steps
 
-        if (slow === fast) {
+        if (slow === fast) {                  // If pointers meet, a cycle exists
             return true;
         }
     }
 
-    return false;
+    return false;                             // If fast pointer reached the end, no cycle
 }
 
 /**
@@ -48,23 +52,33 @@ export function hasCycle(head: ListNode | null): boolean {
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: head = [3,2,0,-4], pos = 1 (pos indicates where tail connects)
+ * Output: Return the node with value 2 (at position 1)
+ * Explanation: There is a cycle in the linked list where the tail connects to the second node.
  */
 export function detectCycle(head: ListNode | null): ListNode | null {
-    let slow = head, fast = head;
-    while (fast && fast.next) {
-        slow = slow!.next;
-        fast = fast.next.next;
-        if (slow === fast) {
-            // Cycle detected, find entry
-            let result = head;
-            while (result !== slow) {
-                result = result!.next;
+    let slow = head, fast = head;             // Initialize both pointers at the head
+
+    while (fast && fast.next) {               // Continue until fast reaches the end (null)
+        slow = slow!.next;                    // Move slow pointer one step
+        fast = fast.next.next;                // Move fast pointer two steps
+
+        if (slow === fast) {                  // If pointers meet, a cycle exists
+            // Phase 2: Find the entrance of the cycle
+            let result = head;                // Reset a pointer to the head
+
+            while (result !== slow) {         // Move both pointers one step at a time
+                result = result!.next;        // Until they meet at the cycle entrance
                 slow = slow!.next;
             }
-            return result;
+
+            return result;                    // Return the node where the cycle begins
         }
     }
-    return null;
+
+    return null;                              // No cycle detected, return null
 }
 
 /**
@@ -73,26 +87,76 @@ export function detectCycle(head: ListNode | null): ListNode | null {
  * Problem: Determine if a number is happy (eventually reaches 1 by replacing with sum of squares of digits).
  * 
  * Approach: Fast & Slow Pointers (cycle detection)
- * - Use a set or Floyd's cycle detection to check for cycles
+ * - Apply the transformation and use two pointers moving at different speeds
+ * - If we reach 1, return true
+ * - If we detect a cycle (meaning it will never reach 1), return false
  * 
  * Time Complexity: O(log n)
  * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: n = 19
+ * Output: true
+ * Explanation: 1² + 9² = 82, 8² + 2² = 68, 6² + 8² = 100, 1² + 0² + 0² = 1
  */
 export function isHappy(n: number): boolean {
+    // Helper function to calculate sum of squares of digits
     function getNext(num: number): number {
-        let result = 0;
-        while (num > 0) {
-            const digit = num % 10;
-            result += digit * digit;
-            num = Math.floor(num / 10);
+        let sum = 0;                          // Initialize sum
+        while (num > 0) {                     // Process each digit
+            const digit = num % 10;           // Get rightmost digit
+            sum += digit * digit;             // Add square of digit to sum
+            num = Math.floor(num / 10);       // Remove rightmost digit
         }
-        return result;
+        return sum;                           // Return the sum of squared digits
     }
 
-    let slow = n, fast = getNext(n);
-    while (fast !== 1 && slow !== fast) {
-        slow = getNext(slow);
-        fast = getNext(getNext(fast));
+    let slow = n;                             // Slow pointer starts at n
+    let fast = getNext(n);                    // Fast pointer starts one step ahead
+
+    while (fast !== 1 && slow !== fast) {     // Continue until we find 1 or detect a cycle
+        slow = getNext(slow);                 // Move slow pointer one transformation
+        fast = getNext(getNext(fast));        // Move fast pointer two transformations
     }
-    return fast === 1;
+
+    return fast === 1;                        // Return true if we reached 1, false if cycle detected
+}
+
+
+/**
+ * Solution for "Find the Duplicate Number" - LeetCode #287
+ * 
+ * Problem: Given an array of integers nums containing n + 1 integers where each 
+ * integer is in the range [1, n] inclusive, find the duplicate number.
+ * 
+ * Approach: Fast & Slow Pointers (Floyd's Cycle Detection)
+ * - Treat array as a linked list where nums[i] points to nums[nums[i]]
+ * - Use cycle detection to find the entrance of the cycle (duplicate number)
+ * 
+ * Time Complexity: O(n)
+ * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: nums = [1,3,4,2,2]
+ * Output: 2
+ * Explanation: 2 is the duplicate number.
+ */
+export function findDuplicate(nums: number[]): number {
+    // Phase 1: Find intersection point in the cycle
+    let slow = nums[0];                       // Slow pointer starts at first element
+    let fast = nums[0];                       // Fast pointer starts at first element
+
+    do {
+        slow = nums[slow];                    // Move slow pointer one step
+        fast = nums[nums[fast]];              // Move fast pointer two steps
+    } while (slow !== fast);                  // Continue until pointers meet
+
+    // Phase 2: Find entrance to the cycle
+    slow = nums[0];                           // Reset slow pointer to start
+    while (slow !== fast) {                   // Move both pointers at same speed
+        slow = nums[slow];                    // Move slow pointer one step
+        fast = nums[fast];                    // Move fast pointer one step
+    }
+
+    return slow;                              // Return the entrance to cycle (duplicate number)
 }

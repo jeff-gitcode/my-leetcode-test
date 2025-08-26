@@ -5,7 +5,19 @@
  * Applications: Tree/graph traversal, path finding, cycle detection
  */
 
-import { TreeNode } from './treeTraversal';
+/**
+ * Definition for a binary tree node
+ */
+export class TreeNode {
+    val: number;
+    left: TreeNode | null;
+    right: TreeNode | null;
+    constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+        this.val = (val === undefined ? 0 : val);
+        this.left = (left === undefined ? null : left);
+        this.right = (right === undefined ? null : right);
+    }
+}
 
 /**
  * Maximum Depth of Binary Tree
@@ -67,45 +79,62 @@ export function allPathsSourceTarget(graph: number[][]): number[][] {
 }
 
 /**
- * Number of Islands (2D Grid DFS)
- * @param grid - 2D grid of '1's (land) and '0's (water)
- * @returns Number of islands
+ * Solution for "Number of Islands" - LeetCode #200
+ * 
+ * Problem: Given a 2D grid of '1's (land) and '0's (water), count the number of islands.
+ * An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.
+ * 
+ * Approach: Depth-First Search (DFS)
+ * - Iterate through each cell in the grid
+ * - When we find a land cell ('1'), increment island count and use DFS to mark all connected land as visited
+ * - Mark visited cells by changing '1' to '0' to avoid counting the same island multiple times
+ * 
+ * Time Complexity: O(m * n) where m is number of rows and n is number of columns
+ * Space Complexity: O(m * n) in worst case for the recursion stack
+ * 
+ * Example:
+ * Input: grid = [
+ *   ["1","1","0","0","0"],
+ *   ["1","1","0","0","0"],
+ *   ["0","0","1","0","0"],
+ *   ["0","0","0","1","1"]
+ * ]
+ * Output: 3
  */
 export function numIslands(grid: string[][]): number {
-    if (!grid || grid.length === 0) return 0;
+    if (!grid || grid.length === 0) return 0;        // Edge case: empty grid
 
-    const rows = grid.length;
-    const cols = grid[0].length;
-    let result = 0;
+    const rows = grid.length;                        // Number of rows in the grid
+    const cols = grid[0].length;                     // Number of columns in the grid
+    let count = 0;                                   // Counter for number of islands
 
-    // DFS to mark all connected land as visited
-    const dfs = (row: number, col: number): void => {
-        // Base case: out of bounds or water
-        if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] === '0') {
+    // Helper function to perform DFS from a land cell
+    const dfs = (r: number, c: number): void => {
+        // Base case: out of bounds or not land
+        if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] === '0') {
             return;
         }
 
-        // Mark current cell as visited
-        grid[row][col] = '0';
+        grid[r][c] = '0';                            // Mark current cell as visited
 
-        // Explore all 4 directions
-        dfs(row + 1, col); // Down
-        dfs(row - 1, col); // Up
-        dfs(row, col + 1); // Right
-        dfs(row, col - 1); // Left
+        // Explore all 4 directions (up, right, down, left)
+        dfs(r - 1, c);                               // Up
+        dfs(r, c + 1);                               // Right
+        dfs(r + 1, c);                               // Down
+        dfs(r, c - 1);                               // Left
     };
 
-    // Iterate through grid, start DFS for each unvisited land cell
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-            if (grid[row][col] === '1') {
-                result++;
-                dfs(row, col); // Mark entire island as visited
+    // Iterate through each cell in the grid
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+            if (grid[r][c] === '1') {                // Found an unvisited land cell
+                count++;                             // Found a new island
+                dfs(r, c);                           // Mark the entire island as visited
             }
         }
     }
 
-    return result;
+    return count;                                    // Return the total number of islands
 }
 
 /**
@@ -164,91 +193,108 @@ export function canFinish(numCourses: number, prerequisites: number[][]): boolea
 }
 
 /**
- * Node class for undirected graph
+ * Node class for graph representation
  */
-export class GraphNode {
+export class Node {
     val: number;
-    neighbors: GraphNode[];
-
-    constructor(val?: number, neighbors?: GraphNode[]) {
-        this.val = val === undefined ? 0 : val;
-        this.neighbors = neighbors === undefined ? [] : neighbors;
+    neighbors: Node[];
+    constructor(val?: number, neighbors?: Node[]) {
+        this.val = (val === undefined ? 0 : val);
+        this.neighbors = (neighbors === undefined ? [] : neighbors);
     }
 }
 
 /**
  * Solution for "Clone Graph" - LeetCode #133
  * 
- * Problem: Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph.
+ * Problem: Given a reference of a node in a connected undirected graph, 
+ * return a deep copy (clone) of the graph.
  * 
- * Approach: DFS with HashMap
- * - Use a map to track already cloned nodes to avoid cycles and duplicate nodes.
- * - Recursively clone each node and its neighbors.
+ * Approach: Depth-First Search (DFS) with HashMap
+ * - Use a map to keep track of nodes we've already cloned
+ * - For each node, create a clone and recursively clone its neighbors
  * 
- * Time Complexity: O(N) where N is the number of nodes
- * Space Complexity: O(N) (for visited map and recursion stack)
+ * Time Complexity: O(n + e) where n is number of nodes and e is number of edges
+ * Space Complexity: O(n) for the visited map and recursion stack
  * 
  * Example:
- * Input: Node 1 with neighbors [2,4], Node 2 with neighbors [1,3], Node 3 with neighbors [2,4], Node 4 with neighbors [1,3]
- * Output: Deep copy of the graph with same structure and values.
+ * Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+ * Output: [[2,4],[1,3],[2,4],[1,3]]
+ * Explanation: The graph has 4 nodes where node 1's neighbors are nodes 2 and 4,
+ * node 2's neighbors are nodes 1 and 3, and so on.
  */
-export function cloneGraph(node: GraphNode | null): GraphNode | null {
-    if (!node) return null;
+export function cloneGraph(node: Node | null): Node | null {
+    if (!node) return null;                          // Edge case: empty graph
 
-    const visited = new Map<GraphNode, GraphNode>();
+    const visited = new Map<number, Node>();         // Map to track already cloned nodes
 
-    const dfs = (originalNode: GraphNode): GraphNode => {
-        // If already cloned, return the clone
-        if (visited.has(originalNode)) {
-            return visited.get(originalNode)!;
+    // Helper function to perform DFS and clone nodes
+    const dfs = (originalNode: Node): Node => {
+        // If we've already cloned this node, return the clone
+        if (visited.has(originalNode.val)) {
+            return visited.get(originalNode.val)!;
         }
 
-        // Create clone of current node
-        const cloneNode = new GraphNode(originalNode.val);
-        visited.set(originalNode, cloneNode);
+        // Create a new node with the same value
+        const cloneNode = new Node(originalNode.val);
+        visited.set(originalNode.val, cloneNode);    // Store in visited map
 
-        // Clone all neighbors
+        // Clone all neighbors by recursively calling DFS
         for (const neighbor of originalNode.neighbors) {
             cloneNode.neighbors.push(dfs(neighbor));
         }
 
-        return cloneNode;
+        return cloneNode;                           // Return the cloned node
     };
 
-    return dfs(node);
+    return dfs(node);                               // Start DFS from the input node
 }
 
+
+
+
 /**
- * Path Sum II - Find all root-to-leaf paths with given sum
- * @param root - Root of the binary tree
- * @param targetSum - Target sum to find
- * @returns All root-to-leaf paths that sum to targetSum
+ * Solution for "Path Sum II" - LeetCode #113
+ * 
+ * Problem: Given the root of a binary tree and an integer targetSum, 
+ * return all root-to-leaf paths where the sum of the node values equals targetSum.
+ * 
+ * Approach: Depth-First Search (DFS) with Backtracking
+ * - Use DFS to explore all paths from root to leaf
+ * - Keep track of current path and sum
+ * - When reaching a leaf node, check if sum matches target
+ * 
+ * Time Complexity: O(n^2) where n is number of nodes (worst case for a skewed tree with all paths matching)
+ * Space Complexity: O(h) where h is the height of the tree
+ * 
+ * Example:
+ * Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+ * Output: [[5,4,11,2],[5,8,4,5]]
  */
 export function pathSum(root: TreeNode | null, targetSum: number): number[][] {
-    const result: number[][] = [];
+    const result: number[][] = [];                  // Store all valid paths
 
-    const dfs = (node: TreeNode | null, remainingSum: number, path: number[]): void => {
-        if (!node) return;
+    // Helper function to perform DFS
+    const dfs = (node: TreeNode | null, remaining: number, path: number[]): void => {
+        if (!node) return;                          // Base case: null node
 
-        // Add current node to path
-        path.push(node.val);
+        path.push(node.val);                        // Add current node to path
 
-        // Check if it's a leaf and sum matches
-        if (!node.left && !node.right && remainingSum === node.val) {
-            result.push([...path]); // Add copy of current path
+        // Check if it's a leaf node and sum matches target
+        if (!node.left && !node.right && remaining === node.val) {
+            result.push([...path]);                 // Add a copy of the path to result
         }
 
-        // Continue DFS with updated sum
-        const newRemainingSum = remainingSum - node.val;
-        dfs(node.left, newRemainingSum, path);
-        dfs(node.right, newRemainingSum, path);
+        // Continue DFS on left and right subtrees
+        const newRemaining = remaining - node.val;  // Subtract current value from remaining sum
+        dfs(node.left, newRemaining, path);         // Explore left subtree
+        dfs(node.right, newRemaining, path);        // Explore right subtree
 
-        // Backtrack
-        path.pop();
+        path.pop();                                 // Backtrack: remove current node from path
     };
 
-    dfs(root, targetSum, []);
-    return result;
+    dfs(root, targetSum, []);                       // Start DFS from the root
+    return result;                                  // Return all valid paths
 }
 
 /**
