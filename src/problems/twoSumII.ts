@@ -1,15 +1,14 @@
 /**
- * Solution for the "Two Sum II - Input Array Is Sorted" problem
+ * Solution for "Two Sum II - Input Array Is Sorted" - LeetCode #167
  * 
- * Problem: Given a 1-indexed array of integers numbers that is already sorted in 
- * non-decreasing order, find two numbers such that they add up to a specific target number.
- * Return the indices of the two numbers (1-indexed) as an integer array of length 2.
+ * Problem: Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order,
+ * find two numbers such that they add up to a specific target number.
+ * Return the indices of the two numbers, index1 and index2, added by one as an integer array [index1, index2].
  * 
- * Approach: Use two pointers technique
- * - Start with left pointer at beginning and right pointer at end
- * - If sum is less than target, move left pointer right
- * - If sum is greater than target, move right pointer left
- * - If sum equals target, return the indices (1-indexed)
+ * Approach: Two Pointers
+ * - Use two pointers: one at the beginning, one at the end
+ * - Move pointers towards each other based on comparison with target
+ * - Return 1-indexed positions when sum equals target
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(1)
@@ -17,28 +16,29 @@
  * Example:
  * Input: numbers = [2,7,11,15], target = 9
  * Output: [1,2]
- * Explanation: 2 + 7 = 9, indices are 1-based.
+ * Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2 (1-indexed).
  */
-/**
- * Finds two numbers in a sorted array that add up to target
- * @param numbers - Sorted array of integers (1-indexed)
- * @param target - Target sum
- * @returns Array containing 1-indexed positions of the two numbers
- */
+
 export function twoSum(numbers: number[], target: number): number[] {
-    let left = 0; // Left pointer at start
-    let right = numbers.length - 1; // Right pointer at end
+    // Initialize two pointers
+    let left = 0;
+    let right = numbers.length - 1;
 
     while (left < right) {
-        const sum = numbers[left] + numbers[right]; // Sum of two pointers
+        const sum = numbers[left] + numbers[right];
+
         if (sum === target) {
-            return [left + 1, right + 1]; // Return 1-based indices
+            // Return 1-indexed positions (problem requirement)
+            return [left + 1, right + 1];
         } else if (sum < target) {
-            left++; // Move left pointer right if sum is too small
+            // Sum is too small, increment left pointer
+            left++;
         } else {
-            right--; // Move right pointer left if sum is too large
+            // Sum is too large, decrement right pointer
+            right--;
         }
     }
 
-    return []; // No solution found
+    // Per problem statement, there is always exactly one solution
+    return [-1, -1]; // Should never reach here
 }

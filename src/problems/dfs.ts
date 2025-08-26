@@ -3,19 +3,28 @@
  * 
  * Pattern: Explore as far as possible before backtracking
  * Applications: Tree/graph traversal, path finding, cycle detection
+ * 
+ * Example: A DFS traversal of this tree:
+ *      1
+ *     / \
+ *    2   3
+ *   / \   \
+ *  4   5   6
+ * 
+ * Would visit nodes in order: 1, 2, 4, 5, 3, 6
  */
 
 /**
  * Definition for a binary tree node
  */
 export class TreeNode {
-    val: number;
-    left: TreeNode | null;
-    right: TreeNode | null;
+    val: number;    // Value stored in the node
+    left: TreeNode | null;    // Reference to left child node
+    right: TreeNode | null;   // Reference to right child node
     constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
-        this.val = (val === undefined ? 0 : val);
-        this.left = (left === undefined ? null : left);
-        this.right = (right === undefined ? null : right);
+        this.val = (val === undefined ? 0 : val);    // Initialize node value, default to 0
+        this.left = (left === undefined ? null : left);    // Initialize left child, default to null
+        this.right = (right === undefined ? null : right);   // Initialize right child, default to null
     }
 }
 
@@ -23,14 +32,22 @@ export class TreeNode {
  * Maximum Depth of Binary Tree
  * @param root - Root of the binary tree
  * @returns Maximum depth of the tree
+ * 
+ * Example: 
+ *      3
+ *     / \
+ *    9  20
+ *       / \
+ *      15  7
+ * Output: 3
  */
 export function maxDepth(root: TreeNode | null): number {
-    if (!root) return 0;
+    if (!root) return 0;    // Base case: empty tree has depth 0
 
-    const leftDepth = maxDepth(root.left);
-    const rightDepth = maxDepth(root.right);
+    const leftDepth = maxDepth(root.left);    // Recursively get the depth of left subtree
+    const rightDepth = maxDepth(root.right);    // Recursively get the depth of right subtree
 
-    return Math.max(leftDepth, rightDepth) + 1;
+    return Math.max(leftDepth, rightDepth) + 1;    // Return the larger depth + 1 (for current node)
 }
 
 /**
@@ -38,44 +55,62 @@ export function maxDepth(root: TreeNode | null): number {
  * @param root - Root of the binary tree
  * @param targetSum - Target sum to find
  * @returns True if path exists, false otherwise
+ * 
+ * Example:
+ *      5
+ *     / \
+ *    4   8
+ *   /   / \
+ *  11  13  4
+ * /  \      \
+ * 7   2      1
+ * 
+ * targetSum = 22 => true (path: 5->4->11->2)
  */
 export function hasPathSum(root: TreeNode | null, targetSum: number): boolean {
-    if (!root) return false;
+    if (!root) return false;    // Base case: empty tree has no path
 
     // If it's a leaf node, check if the value equals remaining sum
-    if (!root.left && !root.right) {
-        return root.val === targetSum;
+    if (!root.left && !root.right) {    // Check if this is a leaf node (no children)
+        return root.val === targetSum;    // Check if this leaf node's value equals the target sum
     }
 
     // Recursively check left and right subtrees with updated sum
-    const remainingSum = targetSum - root.val;
-    return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum);
+    const remainingSum = targetSum - root.val;    // Subtract current value from target sum
+    return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum);    // Check if either subtree has a valid path
 }
 
 /**
  * All Paths From Source to Target (Graph DFS)
  * @param graph - Adjacency list representation of directed acyclic graph
  * @returns All paths from node 0 to node n-1
+ * 
+ * Example:
+ * Input: graph = [[1,2],[3],[3],[]]
+ * Output: [[0,1,3],[0,2,3]]
+ * Explanation: There are two paths from vertex 0 to vertex 3:
+ * 0 -> 1 -> 3
+ * 0 -> 2 -> 3
  */
 export function allPathsSourceTarget(graph: number[][]): number[][] {
-    const result: number[][] = [];
-    const target = graph.length - 1;
+    const result: number[][] = [];    // Array to store all valid paths
+    const target = graph.length - 1;    // Target node is the last node (n-1)
 
-    const dfs = (node: number, path: number[]): void => {
-        if (node === target) {
-            result.push([...path]);
-            return;
+    const dfs = (node: number, path: number[]): void => {    // DFS helper function
+        if (node === target) {    // Base case: reached target node
+            result.push([...path]);    // Add a copy of current path to results
+            return;    // Stop exploring this path
         }
 
-        for (const neighbor of graph[node]) {
-            path.push(neighbor);
-            dfs(neighbor, path);
-            path.pop(); // Backtrack
+        for (const neighbor of graph[node]) {    // Iterate through neighbors of current node
+            path.push(neighbor);    // Add neighbor to current path
+            dfs(neighbor, path);    // Recursively explore from this neighbor
+            path.pop();    // Backtrack: remove neighbor from path after exploration
         }
     };
 
-    dfs(0, [0]);
-    return result;
+    dfs(0, [0]);    // Start DFS from node 0 with initial path containing just node 0
+    return result;    // Return all valid paths found
 }
 
 /**
@@ -224,34 +259,31 @@ export class Node {
  * node 2's neighbors are nodes 1 and 3, and so on.
  */
 export function cloneGraph(node: Node | null): Node | null {
-    if (!node) return null;                          // Edge case: empty graph
+    if (!node) return null;                          // Edge case: empty graph returns null
 
-    const visited = new Map<number, Node>();         // Map to track already cloned nodes
+    const visited = new Map<number, Node>();         // Map to track already cloned nodes (original node value → cloned node)
 
     // Helper function to perform DFS and clone nodes
     const dfs = (originalNode: Node): Node => {
         // If we've already cloned this node, return the clone
-        if (visited.has(originalNode.val)) {
-            return visited.get(originalNode.val)!;
+        if (visited.has(originalNode.val)) {         // Check if this node has already been cloned
+            return visited.get(originalNode.val)!;   // Return the existing clone from our map
         }
 
         // Create a new node with the same value
-        const cloneNode = new Node(originalNode.val);
-        visited.set(originalNode.val, cloneNode);    // Store in visited map
+        const cloneNode = new Node(originalNode.val);    // Create a new node with same value
+        visited.set(originalNode.val, cloneNode);    // Add mapping from original to clone
 
         // Clone all neighbors by recursively calling DFS
-        for (const neighbor of originalNode.neighbors) {
-            cloneNode.neighbors.push(dfs(neighbor));
+        for (const neighbor of originalNode.neighbors) {    // For each neighbor of the original node
+            cloneNode.neighbors.push(dfs(neighbor));    // Clone the neighbor and add to neighbors list
         }
 
-        return cloneNode;                           // Return the cloned node
+        return cloneNode;                           // Return the fully cloned node with all its neighbors
     };
 
-    return dfs(node);                               // Start DFS from the input node
+    return dfs(node);                               // Start DFS from the input node and return the clone
 }
-
-
-
 
 /**
  * Solution for "Path Sum II" - LeetCode #113

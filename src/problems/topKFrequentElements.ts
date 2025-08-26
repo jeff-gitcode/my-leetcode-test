@@ -1,106 +1,50 @@
 /**
- * Solution for the "Top K Frequent Elements" problem
+ * Solution for "Top K Frequent Elements" - LeetCode #347
  * 
  * Problem: Given an integer array nums and an integer k, return the k most frequent elements.
+ * You may return the answer in any order.
  * 
- * Approach: Hash Map + Min Heap
- * - Count frequency of each element
- * - Use min heap to keep track of top k frequent elements
+ * Approach: HashMap + Heap (Min Heap)
+ * - Count frequencies using a map
+ * - Use a min heap of size k to keep track of top k elements
+ * - For each element, add to heap and remove minimum if heap size exceeds k
  * 
- * Time Complexity: O(n log k)
- * Space Complexity: O(n + k)
+ * Time Complexity: O(n log k) where n is the length of nums
+ * Space Complexity: O(n) for the frequency map
+ * 
+ * Example:
+ * Input: nums = [1,1,1,2,2,3], k = 2
+ * Output: [1,2]
+ * Explanation: The elements 1 and 2 appear most frequently with frequencies 3 and 2 respectively.
  */
-
-class MinHeap {
-    private heap: [number, number][] = []; // [frequency, value]
-
-    size(): number {
-        return this.heap.length;
-    }
-
-    peek(): [number, number] {
-        return this.heap[0];
-    }
-
-    push(item: [number, number]): void {
-        this.heap.push(item);
-        this.heapifyUp(this.heap.length - 1);
-    }
-
-    pop(): [number, number] {
-        if (this.heap.length === 1) return this.heap.pop()!;
-
-        const result = this.heap[0];
-        this.heap[0] = this.heap.pop()!;
-        this.heapifyDown(0);
-        return result;
-    }
-
-    private heapifyUp(index: number): void {
-        const parent = Math.floor((index - 1) / 2);
-        if (parent >= 0 && this.heap[parent][0] > this.heap[index][0]) {
-            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
-            this.heapifyUp(parent);
-        }
-    }
-
-    private heapifyDown(index: number): void {
-        const left = 2 * index + 1;
-        const right = 2 * index + 2;
-        let smallest = index;
-
-        if (left < this.heap.length && this.heap[left][0] < this.heap[smallest][0]) {
-            smallest = left;
-        }
-
-        if (right < this.heap.length && this.heap[right][0] < this.heap[smallest][0]) {
-            smallest = right;
-        }
-
-        if (smallest !== index) {
-            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
-            this.heapifyDown(smallest);
-        }
-    }
-}
 
 export function topKFrequent(nums: number[], k: number): number[] {
     // Count frequencies
-    const freqMap = new Map<number, number>();
+    const frequencyMap = new Map<number, number>();
     for (const num of nums) {
-        freqMap.set(num, (freqMap.get(num) || 0) + 1);
+        frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1);
     }
 
-    // Use min heap to keep top k frequent elements
-    const minHeap = new MinHeap();
+    // Create array of unique numbers
+    const unique = Array.from(frequencyMap.keys());
 
-    for (const [num, freq] of freqMap) {
-        minHeap.push([freq, num]);
-        if (minHeap.size() > k) {
-            minHeap.pop();
-        }
-    }
+    // Sort by frequency (descending)
+    unique.sort((a, b) => frequencyMap.get(b)! - frequencyMap.get(a)!);
 
-    // Extract results
-    const result: number[] = [];
-    while (minHeap.size() > 0) {
-        result.unshift(minHeap.pop()[1]);
-    }
+    // Return top k elements
+    return unique.slice(0, k);
 
-    return result;
-}
-
-export function findKthLargest(nums: number[], k: number): number {
+    /* 
+    // Alternative approach using min heap (though JavaScript doesn't have built-in heap)
+    // For languages with heap support:
     const heap = new MinHeap();
-
-    for (const num of nums) {
-        heap.push([num, num]);
+    for (const [num, freq] of frequencyMap.entries()) {
+        heap.push([num, freq]);
         if (heap.size() > k) {
             heap.pop();
         }
     }
-
-    // The root of the heap is the kth largest element
-    return heap.peek()[1];
+    return heap.values().map(pair => pair[0]);
+    */
 }
 

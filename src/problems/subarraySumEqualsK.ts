@@ -1,47 +1,47 @@
 /**
- * Solution for the "Subarray Sum Equals K" problem
+ * Solution for "Subarray Sum Equals K" - LeetCode #560
  * 
- * Problem: Given an array of integers nums and an integer k, return the total 
- * number of continuous subarrays whose sum equals to k.
+ * Problem: Given an array of integers nums and an integer k, return the total number of continuous
+ * subarrays whose sum equals to k.
  * 
- * Approach: Use prefix sum with hash map
- * - Track cumulative sum and count occurrences of each prefix sum
+ * Approach: Prefix Sum with HashMap
+ * - Use a map to store prefix sums and their frequencies
  * - For each position, check if (currentSum - k) exists in the map
- * - If it exists, add its count to the result (those are valid subarrays ending at current position)
+ * - If it exists, add its frequency to the result
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(n)
+ * 
+ * Example:
+ * Input: nums = [1,1,1], k = 2
+ * Output: 2
+ * Explanation: There are two subarrays with sum 2: [1,1] at positions 0-1 and 1-2.
+ * 
+ * Input: nums = [1,2,3], k = 3
+ * Output: 2
+ * Explanation: Subarrays [1,2] at positions 0-1 and [3] at position 2.
  */
 
-/**
- * Finds the number of continuous subarrays whose sum equals k
- * @param nums - Array of integers
- * @param k - Target sum
- * @returns Number of subarrays with sum equal to k
- */
 export function subarraySum(nums: number[], k: number): number {
-    // Map to store prefix sum frequencies
-    const prefixSumCount = new Map<number, number>();
+    // Initialize map with running sum 0 having frequency 1 (empty subarray)
+    const map = new Map<number, number>();
+    map.set(0, 1);
 
-    // Initialize with sum 0 appearing once (empty subarray)
-    prefixSumCount.set(0, 1);
+    let count = 0;      // Result: number of valid subarrays
+    let prefixSum = 0;  // Running sum up to current position
 
-    let currentSum = 0;
-    let count = 0;
+    for (let i = 0; i < nums.length; i++) {
+        // Update running sum
+        prefixSum += nums[i];
 
-    for (const num of nums) {
-        // Update current prefix sum
-        currentSum += num;
-
-        // Check if (currentSum - k) exists in map
-        // This means there's a subarray ending at current position with sum k
-        const target = currentSum - k;
-        if (prefixSumCount.has(target)) {
-            count += prefixSumCount.get(target)!;
+        // Check if we have seen (prefixSum - k) before
+        // If so, there are 'map.get(prefixSum - k)' subarrays ending at i with sum k
+        if (map.has(prefixSum - k)) {
+            count += map.get(prefixSum - k)!;
         }
 
-        // Update frequency of current prefix sum
-        prefixSumCount.set(currentSum, (prefixSumCount.get(currentSum) || 0) + 1);
+        // Update prefix sum frequency in map
+        map.set(prefixSum, (map.get(prefixSum) || 0) + 1);
     }
 
     return count;

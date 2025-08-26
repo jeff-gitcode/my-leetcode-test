@@ -1,50 +1,43 @@
 /**
- * Contiguous Array - LeetCode Medium
- *
- * Problem: Given a binary array nums, find the maximum length of a contiguous subarray with equal number of 0 and 1.
+ * Solution for "Contiguous Array" - LeetCode #525
  * 
- * Approach: Prefix Sum with Hashmap
- * - Convert 0s to -1s so that equal number of 0s and 1s sum to 0
- * - Keep track of running sum and first index where each sum appears
- * - When we encounter a sum we've seen before, it means the subarray between the first occurrence 
- *   and current index has equal 0s and 1s
- * - Track maximum length of such subarrays
+ * Problem: Given a binary array nums, find the maximum length of a contiguous subarray
+ * with an equal number of 0 and 1.
+ * 
+ * Approach: Prefix Sum with HashMap
+ * - Convert 0s to -1s so equal number of 0s and 1s means sum = 0
+ * - Use a map to store the first occurrence of each running sum
+ * - When we see the same sum again, we found a subarray with equal 0s and 1s
  * 
  * Time Complexity: O(n)
  * Space Complexity: O(n)
+ * 
+ * Example:
+ * Input: nums = [0,1,0,0,1,1,0]
+ * Output: 6
+ * Explanation: The subarray [0,1,0,0,1,1] has equal number of 0s and 1s (3 each).
  */
 
-/**
- * Finds the maximum length of a contiguous subarray with an equal number of 0 and 1.
- * @param nums - Binary array containing only 0 and 1
- * @returns Maximum length of a contiguous subarray with equal number of 0 and 1
- */
 export function findMaxLength(nums: number[]): number {
-    // Edge cases
-    if (!nums || nums.length < 2) {
-        return 0;
-    }
-
-    // Use a map to store the first occurrence of each sum
+    // Initialize map with running sum 0 at index -1 (before array starts)
     const map = new Map<number, number>();
-    map.set(0, -1); // Initialize with sum 0 at index -1 (base case)
+    map.set(0, -1);
 
-    let result = 0;
-    let count = 0;  // Treat 0s as -1 and 1s as 1, so count tracks sum
+    let maxLength = 0;
+    let count = 0; // Running sum (treating 0s as -1s)
 
     for (let i = 0; i < nums.length; i++) {
-        // Increment count for 1, decrement for 0
+        // Increment count by 1 for 1s, decrement by 1 for 0s
         count += nums[i] === 1 ? 1 : -1;
 
-        // If we've seen this count before, it means the subarray between
-        // the first occurrence and current index has equal 0s and 1s
+        // If we've seen this count before, we found a subarray with equal 0s and 1s
         if (map.has(count)) {
-            result = Math.max(result, i - map.get(count)!);
+            maxLength = Math.max(maxLength, i - map.get(count)!);
         } else {
-            // Store the first index where we see this count
+            // Store the first occurrence of this count
             map.set(count, i);
         }
     }
 
-    return result;
+    return maxLength;
 }
