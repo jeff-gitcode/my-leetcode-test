@@ -1,45 +1,52 @@
 /**
  * Solution for "Linked List Cycle" - LeetCode #141
  * 
- * Problem: Given head of a linked list, determine if the linked list has a cycle.
+ * Problem: Given head, the head of a linked list, determine if the linked list has a cycle in it.
+ * Return true if there is a cycle, or false otherwise.
  * 
- * Approach: Fast & Slow Pointers (Floyd's Cycle Detection)
+ * Approach: Fast & Slow Pointers (Floyd's Cycle-Finding Algorithm)
  * - Use two pointers moving at different speeds
- * - If there's a cycle, fast pointer will eventually catch up to slow pointer
+ * - If they meet, there is a cycle
+ * - If the fast pointer reaches the end, there is no cycle
  * 
  * Time Complexity: O(n)
- * Space Complexity: O(1)
+ * Space Complexity: O(1) - constant extra space
  * 
  * Example:
- * Input: head = [3,2,0,-4], pos = 1 (pos indicates where tail connects)
+ * Input: head = [3,2,0,-4], pos = 1 (cycle links to position 1)
  * Output: true
- * Explanation: There is a cycle in the linked list where the tail connects to node at position 1.
+ * Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
  */
+
+// Definition for singly-linked list with a potential cycle
 export class ListNode {
-    val: number;                     // Value stored in the node
-    next: ListNode | null;           // Reference to the next node or null if it's the end
+    val: number;
+    next: ListNode | null;
     constructor(val?: number, next?: ListNode | null) {
-        this.val = (val === undefined ? 0 : val);          // Default value is 0
-        this.next = (next === undefined ? null : next);    // Default next is null
+        this.val = (val === undefined ? 0 : val);
+        this.next = (next === undefined ? null : next);
     }
 }
 
 export function hasCycle(head: ListNode | null): boolean {
-    if (!head || !head.next) return false;    // If list is empty or has only one node, no cycle possible
+    // Edge case: empty list or single node
+    if (!head || !head.next) return false;
 
-    let slow: ListNode | null = head;         // Slow pointer starts at head
-    let fast: ListNode | null = head;         // Fast pointer also starts at head
+    // Initialize slow and fast pointers at the head
+    let slow: ListNode | null = head;
+    let fast: ListNode | null = head;
 
-    while (fast && fast.next) {               // Continue until fast reaches end (null)
-        slow = slow!.next;                    // Move slow pointer one step
-        fast = fast.next.next;                // Move fast pointer two steps
+    // Move slow by 1 step and fast by 2 steps
+    while (fast && fast.next) {
+        slow = slow!.next;          // Move slow pointer by 1
+        fast = fast.next.next;      // Move fast pointer by 2
 
-        if (slow === fast) {                  // If pointers meet, a cycle exists
-            return true;
-        }
+        // If they meet, there's a cycle
+        if (slow === fast) return true;
     }
 
-    return false;                             // If fast pointer reached the end, no cycle
+    // If fast reaches the end, there's no cycle
+    return false;
 }
 
 /**

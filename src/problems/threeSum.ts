@@ -1,53 +1,71 @@
 /**
- * Solution for the "3Sum" problem - LeetCode #15
+ * Solution for "3Sum" - LeetCode #15
  * 
- * Problem: Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] 
+ * Problem: Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]]
  * such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+ * Notice that the solution set must not contain duplicate triplets.
  * 
- * Approach: Sort array + Two Pointers
- * - Sort the array first
- * - For each element, use two pointers to find pairs that sum to the negative of current element
+ * Approach: Sorting + Two Pointers
+ * - Sort the array to handle duplicates easily
+ * - For each element as first number, use two pointers to find pairs that sum to its negation
  * - Skip duplicates to avoid duplicate triplets
  * 
- * Time Complexity: O(n²)
- * Space Complexity: O(1) excluding output array
+ * Time Complexity: O(n²) - sorting takes O(n log n) and the two-pointer search takes O(n²)
+ * Space Complexity: O(n) for the output array (not counting the sorting algorithm's space)
  * 
  * Example:
  * Input: nums = [-1,0,1,2,-1,-4]
  * Output: [[-1,-1,2],[-1,0,1]]
- * Explanation: The unique triplets that sum to zero are [-1,-1,2] and [-1,0,1].
+ * Explanation: 
+ * nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0
+ * nums[0] + nums[2] + nums[4] = (-1) + 1 + (-1) = -1 (not included)
+ * nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 (duplicate of [-1,-1,2], not included)
+ * nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 (included as [-1,0,1])
  */
 
 export function threeSum(nums: number[]): number[][] {
-    if (nums.length < 3) return []; // Not enough elements for a triplet
+    // Edge case: need at least 3 numbers to form triplets
+    if (nums.length < 3) return [];
 
-    nums.sort((a, b) => a - b); // Sort the array for two-pointer approach
+    // Sort the array to handle duplicates and use two-pointer technique
+    nums.sort((a, b) => a - b);
+
     const result: number[][] = [];
 
-    for (let i = 0; i < nums.length - 2; i++) { // ensures that there are always at least two more elements after i in the array. This is important because the threeSum problem requires finding triplets (groups of three numbers) that sum to a target value (usually zero).
-        if (i > 0 && nums[i] === nums[i - 1]) continue; // Skip duplicate first elements
+    // Fix the first element and use two pointers for the other two elements
+    for (let i = 0; i < nums.length - 2; i++) {
+        // Skip duplicate first elements
+        if (i > 0 && nums[i] === nums[i - 1]) continue;
 
-        let left = i + 1; // Left pointer after i
-        let right = nums.length - 1; // Right pointer at end
+        // Set two pointers: left after i, right at end of array
+        let left = i + 1;
+        let right = nums.length - 1;
 
         while (left < right) {
-            const sum = nums[i] + nums[left] + nums[right]; // Sum of triplet
+            const sum = nums[i] + nums[left] + nums[right];
 
-            if (sum === 0) {
-                result.push([nums[i], nums[left], nums[right]]); // Found a valid triplet
+            if (sum < 0) {
+                // If sum is too small, move left pointer right
+                left++;
+            } else if (sum > 0) {
+                // If sum is too large, move right pointer left
+                right--;
+            } else {
+                // Found a valid triplet
+                result.push([nums[i], nums[left], nums[right]]);
 
-                while (left < right && nums[left] === nums[left + 1]) left++; // Skip duplicate left
-                while (left < right && nums[right] === nums[right - 1]) right--; // Skip duplicate right
+                // Skip duplicates for second element
+                while (left < right && nums[left] === nums[left + 1]) left++;
 
+                // Skip duplicates for third element
+                while (left < right && nums[right] === nums[right - 1]) right--;
+
+                // Move both pointers inward
                 left++;
                 right--;
-            } else if (sum < 0) {
-                left++; // Need a larger sum, move left pointer right
-            } else {
-                right--; // Need a smaller sum, move right pointer left
             }
         }
     }
 
-    return result; // Return all unique triplets
+    return result;
 }

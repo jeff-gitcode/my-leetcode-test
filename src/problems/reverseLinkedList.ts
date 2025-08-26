@@ -1,16 +1,21 @@
 /**
- * Solution for the "Reverse Linked List" problem
+ * Solution for "Reverse Linked List" - LeetCode #206
  * 
  * Problem: Given the head of a singly linked list, reverse the list and return the reversed list.
  * 
- * Approach: Iterative In-place Reversal
- * - Use three pointers: prev, current, next
- * - Reverse links one by one
+ * Approach: In-place Iterative Reversal
+ * - Track previous, current, and next nodes
+ * - Reverse each pointer as we traverse the list
  * 
- * Time Complexity: O(n)
- * Space Complexity: O(1)
+ * Time Complexity: O(n) where n is the length of the list
+ * Space Complexity: O(1) - constant extra space
+ * 
+ * Example:
+ * Input: head = [1,2,3,4,5]
+ * Output: [5,4,3,2,1]
  */
 
+// Definition for singly-linked list
 export class ListNode {
     val: number;
     next: ListNode | null;
@@ -20,29 +25,51 @@ export class ListNode {
     }
 }
 
-/**
- * Solution for "Reverse Linked List" - LeetCode #206
- * 
- * Problem: Reverse a singly linked list.
- * 
- * Approach: Iterative
- * - Use three pointers to reverse links
- * 
- * Time Complexity: O(n)
- * Space Complexity: O(1)
- */
 export function reverseList(head: ListNode | null): ListNode | null {
+    // Edge case: empty list or single node
+    if (!head || !head.next) return head;
+
     let prev: ListNode | null = null;
     let current: ListNode | null = head;
 
-    while (current !== null) {
-        const next = current.next;
+    // Iterate through the list
+    while (current) {
+        // Store next node before we change the pointer
+        const next: ListNode | null = current.next;
+
+        // Reverse the pointer
         current.next = prev;
+
+        // Move forward in the list
         prev = current;
         current = next;
     }
 
+    // The new head is the previous tail (now prev)
     return prev;
+}
+
+/**
+ * Alternative recursive solution
+ * 
+ * Time Complexity: O(n)
+ * Space Complexity: O(n) due to the call stack
+ */
+export function reverseListRecursive(head: ListNode | null): ListNode | null {
+    // Base case: empty list or last node
+    if (!head || !head.next) return head;
+
+    // Recursively reverse the rest of the list after head
+    const reversedList = reverseListRecursive(head.next);
+
+    // Make the next node point back to the current node
+    head.next.next = head;
+
+    // Break the original forward pointer to avoid cycles
+    head.next = null;
+
+    // Return the new head (which was the original tail)
+    return reversedList;
 }
 
 /**
