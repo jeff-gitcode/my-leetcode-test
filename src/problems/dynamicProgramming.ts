@@ -25,29 +25,41 @@ export function fib(n: number): number {
 }
 
 /**
- * Solution for "Climbing Stairs" - LeetCode #70
+ * Problem #70: Climbing Stairs (Easy)
  * 
- * Problem: Given n steps, each time you can climb 1 or 2 steps. How many distinct ways can you climb to the top?
+ * You are climbing a staircase. It takes n steps to reach the top.
+ * Each time you can either climb 1 or 2 steps. 
+ * How many distinct ways can you climb to the top?
  * 
- * Approach: Dynamic Programming
- * - dp[i] = dp[i-1] + dp[i-2]
+ * Approach:
+ * 1. Use dynamic programming with bottom-up approach
+ * 2. The number of ways to reach step n is the sum of ways to reach steps n-1 and n-2
+ * 3. This forms a Fibonacci-like sequence
  * 
  * Time Complexity: O(n)
- * Space Complexity: O(1)
+ * Space Complexity: O(1) - we only store two previous values
+ * 
+ * Example Walkthrough for n=5:
+ * - Base cases: 
+ *   - n=1: 1 way (just one 1-step)
+ *   - n=2: 2 ways (two 1-steps or one 2-step)
+ * - n=3: ways(2) + ways(1) = 2 + 1 = 3 ways
+ * - n=4: ways(3) + ways(2) = 3 + 2 = 5 ways
+ * - n=5: ways(4) + ways(3) = 5 + 3 = 8 ways
  */
 export function climbStairs(n: number): number {
-    if (n <= 2) return n;
+    if (n <= 2) return n;                    // Base cases: 1 way for n=1, 2 ways for n=2
 
-    let prev2 = 1; // dp[i-2]
-    let prev1 = 2; // dp[i-1]
+    let prev2 = 1;                           // Number of ways to reach step 1
+    let prev1 = 2;                           // Number of ways to reach step 2
 
-    for (let i = 3; i <= n; i++) {
-        const current = prev1 + prev2;
-        prev2 = prev1;
-        prev1 = current;
+    for (let i = 3; i <= n; i++) {           // Start from step 3 and build up to n
+        const current = prev1 + prev2;       // Ways to reach step i = ways to reach i-1 + ways to reach i-2
+        prev2 = prev1;                       // Move prev1 to prev2 for next iteration
+        prev1 = current;                     // Update prev1 to current for next iteration
     }
 
-    return prev1;
+    return prev1;                            // After loop completes, prev1 contains the answer for step n
 }
 
 /**
@@ -72,50 +84,74 @@ export function rob(nums: number[]): number {
 }
 
 /**
- * Solution for "Coin Change" - LeetCode #322
+ * Problem #322: Coin Change (Medium)
  * 
- * Problem: Given an array of coin denominations and a target amount, find the minimum number of coins needed to make up that amount. If it's not possible, return -1.
+ * Given an array of coin denominations and a target amount, find the minimum number 
+ * of coins needed to make up that amount. If it's not possible, return -1.
  * 
- * Approach: Dynamic Programming
- * - dp[i] = minimum coins needed to make amount i
- * - For each amount from 1 to target, try every coin and update dp[i]
+ * Approach:
+ * 1. Use dynamic programming with bottom-up approach
+ * 2. For each amount from 0 to target, calculate minimum coins needed
+ * 3. For each coin denomination, try using it if it doesn't exceed current amount
  * 
  * Time Complexity: O(amount * coins.length)
  * Space Complexity: O(amount)
  * 
- * Example:
- * Input: coins = [1, 2, 5], amount = 11
- * Output: 3
- * Explanation: 11 = 5 + 5 + 1
+ * Example Walkthrough for coins=[1,2,5], amount=11:
+ * - Initialize dp[0]=0 (need 0 coins for amount 0)
+ * - Initialize dp[1...11]=Infinity (unknown minimum yet)
+ * - For amount=1:
+ *   - Try coin=1: dp[1] = min(Infinity, dp[0]+1) = 1
+ *   - Other coins are too large
+ * - For amount=2:
+ *   - Try coin=1: dp[2] = min(Infinity, dp[1]+1) = 2
+ *   - Try coin=2: dp[2] = min(2, dp[0]+1) = 1
+ * - For amount=3:
+ *   - Try coin=1: dp[3] = min(Infinity, dp[2]+1) = 2
+ *   - Try coin=2: dp[3] = min(2, dp[1]+1) = 2
+ * - ... and so on
+ * - For amount=11:
+ *   - Try all coins: dp[11] = 3 (using coins 5+5+1)
  */
 export function coinChange(coins: number[], amount: number): number {
-    // dp[i] = minimum coins needed to make amount i
+    // dp[i] represents the minimum coins needed to make amount i
     const dp: number[] = Array(amount + 1).fill(Infinity);
-    dp[0] = 0;
+    // Fill with Infinity to represent "not possible yet"
 
+    dp[0] = 0;                               // Base case: 0 coins needed to make amount 0
+    // This is our starting point for building solutions
+
+    // Process each amount from 1 to the target amount
     for (let i = 1; i <= amount; i++) {
+        // Try each coin denomination
         for (const coin of coins) {
-            if (coin <= i) {
+            if (coin <= i) {                 // Only use the coin if it doesn't exceed current amount
+                // Either keep current minimum or use this coin + minimum for remaining amount
                 dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                // The +1 represents using one of this coin
             }
         }
     }
 
-    // If dp[amount] is still Infinity, it's not possible to make up the amount
+    // If dp[amount] is still Infinity, it means we couldn't make the amount with given coins
     return dp[amount] === Infinity ? -1 : dp[amount];
+    // Return -1 if impossible, otherwise the minimum count
 }
 
 /**
- * Solution for "Longest Increasing Subsequence" - LeetCode #300
+ * Problem #300: Longest Increasing Subsequence (Medium)
  * 
- * Problem: Given an array of integers, find the length of the longest strictly increasing subsequence.
+ * Given an integer array nums, return the length of the longest strictly increasing subsequence.
+ * A subsequence is a sequence that can be derived from an array by deleting some or no elements
+ * without changing the order of the remaining elements.
  * 
- * Approach: Dynamic Programming
- * - dp[i] = length of LIS ending at index i
- * - For each i, check all j < i and update dp[i] if nums[j] < nums[i]
+ * Approach:
+ * 1. Use dynamic programming with dp[i] representing LIS ending at index i
+ * 2. For each element, check all previous elements to find valid extensions
+ * 3. Track the maximum LIS length throughout the array
  * 
- * Time Complexity: O(n^2)
- * Space Complexity: O(n)
+ * Time Complexity: O(n²) where n is the length of the array
+ * Space Complexity: O(n) for the dp array
  * 
  * Example:
  * Input: nums = [10,9,2,5,3,7,101,18]
@@ -123,21 +159,22 @@ export function coinChange(coins: number[], amount: number): number {
  * Explanation: The longest increasing subsequence is [2,3,7,101], length 4.
  */
 export function lengthOfLIS(nums: number[]): number {
-    if (nums.length === 0) return 0;
+    if (nums.length === 0) return 0;         // Handle empty array case
 
-    // dp[i] = length of LIS ending at index i
-    const dp: number[] = Array(nums.length).fill(1);
+    const n = nums.length;
+    const dp: number[] = Array(n).fill(1);   // Initialize dp array with 1 (min LIS length is 1)
+    let maxLength = 1;                       // Track the maximum LIS found
 
-    for (let i = 1; i < nums.length; i++) {
-        for (let j = 0; j < i; j++) {
-            if (nums[j] < nums[i]) {
-                dp[i] = Math.max(dp[i], dp[j] + 1);
+    for (let i = 1; i < n; i++) {            // Start from second element
+        for (let j = 0; j < i; j++) {        // Check all previous elements
+            if (nums[i] > nums[j]) {         // If current element can extend the subsequence
+                dp[i] = Math.max(dp[i], dp[j] + 1);  // Update LIS at position i
             }
         }
+        maxLength = Math.max(maxLength, dp[i]);  // Update the global maximum
     }
 
-    // The answer is the maximum value in dp
-    return Math.max(...dp);
+    return maxLength;                        // Return the maximum LIS length found
 }
 
 /**

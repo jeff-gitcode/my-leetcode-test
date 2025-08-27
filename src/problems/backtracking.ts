@@ -1,40 +1,39 @@
 /**
- * Solution for "Permutations" - LeetCode #46
+ * Problem #46: Permutations (Medium)
  * 
- * Problem: Given an array of distinct integers, return all possible permutations.
+ * Given an array of distinct integers, return all possible permutations.
  * 
- * Approach: Backtracking
- * - Build permutations by choosing unused numbers recursively.
- * - Backtrack after each choice to explore all possibilities.
+ * Approach:
+ * 1. Use backtracking to explore all possible orderings of elements
+ * 2. For each position, try each unused number recursively
+ * 3. Track which elements have been used in the current permutation
  * 
- * Time Complexity: O(n!)
- * Space Complexity: O(n * n!) (output)
+ * Time Complexity: O(n!) - we generate n! permutations
+ * Space Complexity: O(n * n!) - storing all permutations
  * 
  * Example:
  * Input: nums = [1,2,3]
  * Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
  */
 export function permute(nums: number[]): number[][] {
-    const result: number[][] = [];
+    const result: number[][] = [];                // Store all permutations
 
     const backtrack = (current: number[]): void => {
-        // Base case: permutation is complete
-        if (current.length === nums.length) {
-            result.push([...current]);
+        if (current.length === nums.length) {     // Base case: permutation is complete
+            result.push([...current]);            // Make a copy and add to results
             return;
         }
 
-        // Try each unused number
-        for (const num of nums) {
-            if (!current.includes(num)) {
-                current.push(num);      // Choose
-                backtrack(current);     // Explore
-                current.pop();          // Backtrack
-            }
+        for (const num of nums) {                 // Try each number as the next element
+            if (current.includes(num)) continue;  // Skip if number is already used
+
+            current.push(num);                    // Choose: add number to current permutation
+            backtrack(current);                   // Explore: recursively build the rest
+            current.pop();                        // Backtrack: remove number to try alternatives
         }
     };
 
-    backtrack([]);
+    backtrack([]);                                // Start with empty permutation
     return result;
 }
 
@@ -67,39 +66,39 @@ export function combine(n: number, k: number): number[][] {
 }
 
 /**
- * Solution for "Subsets" - LeetCode #78
+ * Problem #78: Subsets (Medium)
  * 
- * Problem: Given an array of unique integers, return all possible subsets (the power set).
+ * Given an array of distinct integers, return all possible subsets (power set).
  * 
- * Approach: Backtracking
- * - For each element, choose to include or exclude it recursively.
- * - Add each subset to the result as you build it.
+ * Approach:
+ * 1. Use backtracking to include/exclude each element
+ * 2. At each step, decide whether to include the next element
+ * 3. Add each valid subset to the result
  * 
- * Time Complexity: O(n * 2^n)
- * Space Complexity: O(n * 2^n) (output)
+ * Time Complexity: O(n * 2^n) - there are 2^n subsets
+ * Space Complexity: O(n * 2^n) - storing all subsets
  * 
  * Example:
  * Input: nums = [1,2,3]
  * Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
  */
 export function subsets(nums: number[]): number[][] {
-    const result: number[][] = [];
+    const result: number[][] = [];                // Store all subsets
 
     const backtrack = (start: number, current: number[]): void => {
-        // Add current subset to result
-        result.push([...current]);
+        result.push([...current]);                // Add the current subset to results
 
-        // Try adding each remaining number
-        for (let i = start; i < nums.length; i++) {
-            current.push(nums[i]);     // Choose
-            backtrack(i + 1, current); // Explore
-            current.pop();             // Backtrack
+        for (let i = start; i < nums.length; i++) {  // Try adding each remaining number
+            current.push(nums[i]);                // Choose: include this element
+            backtrack(i + 1, current);            // Explore: only consider elements after i
+            current.pop();                        // Backtrack: remove element to try alternatives
         }
     };
 
-    backtrack(0, []);
+    backtrack(0, []);                             // Start with empty subset and index 0
     return result;
 }
+
 
 /**
  * Letter Combinations of a Phone Number
@@ -282,51 +281,70 @@ export function exist(board: string[][], word: string): boolean {
 }
 
 /**
- * Solution for "N-Queens" - LeetCode #51
+ * Problem #51: N-Queens (Hard)
  * 
- * Problem: Place n queens on an n x n chessboard so that no two queens attack each other. Return all distinct solutions.
+ * Place n queens on an n×n chessboard so that no two queens attack each other.
  * 
- * Approach: Backtracking
- * - Try placing a queen in each row, check for column/diagonal conflicts
- * - Use sets to track columns and diagonals
+ * Approach:
+ * 1. Place queens row by row using backtracking
+ * 2. For each row, try placing a queen in each column
+ * 3. Check if the placement is valid (no attacks)
+ * 4. Track columns and diagonals that are under attack
  * 
- * Time Complexity: O(n!)
- * Space Complexity: O(n^2) (output)
+ * Time Complexity: O(n!) - approximately n! valid configurations
+ * Space Complexity: O(n^2) - storing the board state
+ * 
+ * Example:
+ * Input: n = 4
+ * Output: [
+ *  [".Q..","...Q","Q...","..Q."],
+ *  ["..Q.","Q...","...Q",".Q.."]
+ * ]
  */
-export function solveNQueens2(n: number): string[][] {
-    const result: string[][] = [];
-    const board: string[] = Array(n).fill('').map(() => '.'.repeat(n));
-    const cols = new Set<number>();
-    const diag1 = new Set<number>(); // row - col
-    const diag2 = new Set<number>(); // row + col
+export function solveNQueens(n: number): string[][] {
+    const result: string[][] = [];                // Store all valid board configurations
 
-    function backtrack(row: number) {
-        if (row === n) {
-            result.push([...board]);
+    // Sets to track attacked columns and diagonals
+    const cols = new Set<number>();               // Track occupied columns
+    const posDiag = new Set<number>();            // Track occupied positive diagonals (r+c)
+    const negDiag = new Set<number>();            // Track occupied negative diagonals (r-c)
+
+    // Create empty board with '.' in all cells
+    const board: string[] = Array(n).fill(0).map(() => '.'.repeat(n));
+
+    const backtrack = (row: number): void => {
+        if (row === n) {                          // Base case: all queens have been placed
+            result.push([...board]);              // Add the current board configuration
             return;
         }
-        for (let col = 0; col < n; col++) {
-            if (cols.has(col) || diag1.has(row - col) || diag2.has(row + col)) continue;
 
-            // Place queen
-            const rowArr = board[row].split('');
-            rowArr[col] = 'Q';
-            board[row] = rowArr.join('');
-            cols.add(col);
-            diag1.add(row - col);
-            diag2.add(row + col);
+        for (let col = 0; col < n; col++) {       // Try placing queen in each column
+            // Check if position is under attack
+            if (cols.has(col) ||
+                posDiag.has(row + col) ||
+                negDiag.has(row - col)) {
+                continue;                         // Skip if position is under attack
+            }
 
-            backtrack(row + 1);
+            // Place queen at (row, col)
+            const newRow = board[row].substring(0, col) + 'Q' + board[row].substring(col + 1);
+            board[row] = newRow;                  // Update board with queen
 
-            // Remove queen
-            rowArr[col] = '.';
-            board[row] = rowArr.join('');
-            cols.delete(col);
-            diag1.delete(row - col);
-            diag2.delete(row + col);
+            // Mark column and diagonals as under attack
+            cols.add(col);                        // Column is now occupied
+            posDiag.add(row + col);               // Positive diagonal (r+c) is occupied
+            negDiag.add(row - col);               // Negative diagonal (r-c) is occupied
+
+            backtrack(row + 1);                   // Explore: try placing queen in next row
+
+            // Remove queen and clear attack markers (backtrack)
+            board[row] = '.'.repeat(n);           // Remove queen from board
+            cols.delete(col);                     // Free up column
+            posDiag.delete(row + col);            // Free up positive diagonal
+            negDiag.delete(row - col);            // Free up negative diagonal
         }
-    }
+    };
 
-    backtrack(0);
+    backtrack(0);                                 // Start with first row (row 0)
     return result;
 }
