@@ -83,46 +83,56 @@ class MinHeap {
  * Explanation: The 2nd largest element is 5.
  */
 export function findKthLargest(nums: number[], k: number): number {
-    const heap: number[] = [];
-    for (const num of nums) {
-        heap.push(num);
-        heap.sort((a, b) => a - b);
-        if (heap.length > k) heap.shift();
+    const heap: number[] = [];                        // Min-heap to store k largest elements
+
+    for (const num of nums) {                         // Iterate through all numbers
+        heap.push(num);                               // Add current number to heap
+        heap.sort((a, b) => a - b);                   // Sort heap to maintain min-heap property
+        if (heap.length > k) heap.shift();            // Remove smallest if heap size exceeds k
     }
-    return heap[0];
+
+    return heap[0];                                   // The root of the heap is the kth largest
 }
 
 /**
- * Solution for "Top K Frequent Elements" - LeetCode #347
+ * Problem #347: Top K Frequent Elements (Medium)
  * 
- * Problem: Given an array of integers, return the k most frequent elements.
+ * Given an array of integers, return the k most frequent elements.
  * 
- * Approach: HashMap + Min Heap
- * - Count the frequency of each element using a map.
- * - Use a min heap to keep track of the top k frequent elements.
- * - If the heap size exceeds k, remove the element with the lowest frequency.
- * - At the end, extract the elements from the heap.
+ * Approach:
+ * 1. Count the frequency of each element using a map.
+ * 2. Use bucket sort: create buckets for each frequency.
+ * 3. Collect elements from highest frequency buckets until k elements are found.
  * 
- * Time Complexity: O(n log k)
+ * Time Complexity: O(n)
  * Space Complexity: O(n)
+ * 
+ * Example:
+ * Input: nums = [1,1,1,2,2,3], k = 2
+ * Output: [1,2]
+ * Explanation: 1 appears 3 times, 2 appears 2 times.
  */
 export function topKFrequent(nums: number[], k: number): number[] {
-    // Count frequencies of each number
-    const freq = new Map<number, number>();
-    for (const num of nums) {
-        freq.set(num, (freq.get(num) || 0) + 1);
+    const frequencyMap = new Map<number, number>();   // Map to count frequencies
+    for (const num of nums) {                         // Count each number's frequency
+        frequencyMap.set(num, (frequencyMap.get(num) || 0) + 1);
     }
 
-    // Min heap to keep top k frequent elements: [frequency, number]
-    const heap: [number, number][] = [];
-    for (const [num, count] of freq.entries()) {
-        heap.push([count, num]);
-        heap.sort((a, b) => a[0] - b[0]); // Sort by frequency (min heap)
-        if (heap.length > k) heap.shift(); // Remove lowest frequency if heap too big
+    const buckets: number[][] = Array(nums.length + 1).fill(null).map(() => []); // Buckets for each frequency
+
+    for (const [num, freq] of frequencyMap) {         // Place numbers in their frequency bucket
+        buckets[freq].push(num);
     }
 
-    // Extract numbers from heap
-    return heap.map(item => item[1]);
+    const result: number[] = [];                      // Store top k frequent elements
+    for (let i = buckets.length - 1; i >= 0 && result.length < k; i--) { // Start from highest frequency
+        if (buckets[i].length > 0) {
+            result.push(...buckets[i]);               // Add all numbers with current frequency
+            if (result.length > k) result.splice(k);  // Only keep k elements
+        }
+    }
+
+    return result;                                    // Return top k frequent elements
 }
 
 /**
@@ -154,3 +164,100 @@ export class KthLargest {
         return this.heap[0];
     }
 }
+
+/**
+ * Problem #373: Find K Pairs with Smallest Sums (Medium)
+ * 
+ * Given two sorted arrays nums1 and nums2, find the k pairs (u, v) with the smallest sums.
+ * 
+ * Approach:
+ * 1. Use a min-heap to always extract the next smallest sum pair.
+ * 2. Push initial pairs (nums1[i], nums2[0]) for i in [0, min(k, nums1.length)).
+ * 3. For each extracted pair, push the next pair in nums2 if not visited.
+ * 
+ * Time Complexity: O(k log k)
+ * Space Complexity: O(k)
+ * 
+ * Example:
+ * Input: nums1 = [1,7,11], nums2 = [2,4,6], k = 3
+ * Output: [[1,2],[1,4],[1,6]]
+ * Explanation: The pairs with the smallest sums are [1,2], [1,4], [1,6].
+ */
+class MinHeap373 {
+    private heap: [number, number, number][] = []; // [sum, i, j]
+
+    size(): number {
+        return this.heap.length;
+    }
+
+    push(item: [number, number, number]): void {
+        this.heap.push(item);
+        this.heapifyUp(this.heap.length - 1);
+    }
+
+    pop(): [number, number, number] {
+        if (this.heap.length === 1) return this.heap.pop()!;
+        const result = this.heap[0];
+        this.heap[0] = this.heap.pop()!;
+        this.heapifyDown(0);
+        return result;
+    }
+
+    private heapifyUp(index: number): void {
+        const parent = Math.floor((index - 1) / 2);
+        if (parent >= 0 && this.heap[parent][0] > this.heap[index][0]) {
+            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
+            this.heapifyUp(parent);
+        }
+    }
+
+    private heapifyDown(index: number): void {
+        const left = 2 * index + 1;
+        const right = 2 * index + 2;
+        let smallest = index;
+        if (left < this.heap.length && this.heap[left][0] < this.heap[smallest][0]) {
+            smallest = left;
+        }
+        if (right < this.heap.length && this.heap[right][0] < this.heap[smallest][0]) {
+            smallest = right;
+        }
+        if (smallest !== index) {
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
+            this.heapifyDown(smallest);
+        }
+    }
+}
+
+export function kSmallestPairs(nums1: number[], nums2: number[], k: number): number[][] {
+    const result: number[][] = [];
+    if (nums1.length === 0 || nums2.length === 0 || k === 0) return result;
+
+    const minHeap = new MinHeap373();
+    const visited = new Set<string>();
+
+    // Push initial pairs (nums1[i], nums2[0])
+    for (let i = 0; i < Math.min(k, nums1.length); i++) {
+        minHeap.push([nums1[i] + nums2[0], i, 0]);
+        visited.add(`${i},0`);
+    }
+
+    while (minHeap.size() > 0 && result.length < k) {
+        const [, i, j] = minHeap.pop();
+        result.push([nums1[i], nums2[j]]);
+
+        // Push next pair in nums2
+        if (j + 1 < nums2.length && !visited.has(`${i},${j + 1}`)) {
+            minHeap.push([nums1[i] + nums2[j + 1], i, j + 1]);
+            visited.add(`${i},${j + 1}`);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Example usage:
+ * findKthLargest([3,2,1,5,6,4], 2) // 5
+ * topKFrequent([1,1,1,2,2,3], 2) // [1,2]
+ * kSmallestPairs([1,7,11], [2,4,6], 3) // [[1,2],[1,4],[1,6]]
+ */
