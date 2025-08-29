@@ -169,95 +169,93 @@ export class KthLargest {
  * Problem #373: Find K Pairs with Smallest Sums (Medium)
  * 
  * Given two sorted arrays nums1 and nums2, find the k pairs (u, v) with the smallest sums.
- * 
  * Approach:
  * 1. Use a min-heap to always extract the next smallest sum pair.
  * 2. Push initial pairs (nums1[i], nums2[0]) for i in [0, min(k, nums1.length)).
  * 3. For each extracted pair, push the next pair in nums2 if not visited.
- * 
- * Time Complexity: O(k log k)
- * Space Complexity: O(k)
  * 
  * Example:
  * Input: nums1 = [1,7,11], nums2 = [2,4,6], k = 3
  * Output: [[1,2],[1,4],[1,6]]
  * Explanation: The pairs with the smallest sums are [1,2], [1,4], [1,6].
  */
+
+// MinHeap373 is a helper class for maintaining a min-heap of [sum, i, j] tuples
 class MinHeap373 {
-    private heap: [number, number, number][] = []; // [sum, i, j]
+    private heap: [number, number, number][] = []; // Array to store heap elements as [sum, i, j]
 
     size(): number {
-        return this.heap.length;
+        return this.heap.length;                   // Return current heap size
     }
 
     push(item: [number, number, number]): void {
-        this.heap.push(item);
-        this.heapifyUp(this.heap.length - 1);
+        this.heap.push(item);                      // Add new item to heap
+        this.heapifyUp(this.heap.length - 1);      // Restore heap property upwards
     }
 
     pop(): [number, number, number] {
-        if (this.heap.length === 1) return this.heap.pop()!;
-        const result = this.heap[0];
-        this.heap[0] = this.heap.pop()!;
-        this.heapifyDown(0);
-        return result;
+        if (this.heap.length === 1) return this.heap.pop()!; // If only one element, pop and return
+        const result = this.heap[0];               // Store root element to return
+        this.heap[0] = this.heap.pop()!;           // Move last element to root
+        this.heapifyDown(0);                       // Restore heap property downwards
+        return result;                             // Return the smallest sum pair
     }
 
     private heapifyUp(index: number): void {
-        const parent = Math.floor((index - 1) / 2);
-        if (parent >= 0 && this.heap[parent][0] > this.heap[index][0]) {
-            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]];
-            this.heapifyUp(parent);
+        const parent = Math.floor((index - 1) / 2); // Find parent index
+        if (parent >= 0 && this.heap[parent][0] > this.heap[index][0]) { // If parent is greater than child
+            [this.heap[parent], this.heap[index]] = [this.heap[index], this.heap[parent]]; // Swap
+            this.heapifyUp(parent);                 // Recursively heapify up
         }
     }
 
     private heapifyDown(index: number): void {
-        const left = 2 * index + 1;
-        const right = 2 * index + 2;
-        let smallest = index;
+        const left = 2 * index + 1;                // Left child index
+        const right = 2 * index + 2;               // Right child index
+        let smallest = index;                      // Assume current index is smallest
+
         if (left < this.heap.length && this.heap[left][0] < this.heap[smallest][0]) {
-            smallest = left;
+            smallest = left;                       // Update smallest if left child is smaller
         }
         if (right < this.heap.length && this.heap[right][0] < this.heap[smallest][0]) {
-            smallest = right;
+            smallest = right;                      // Update smallest if right child is smaller
         }
         if (smallest !== index) {
-            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]];
-            this.heapifyDown(smallest);
+            [this.heap[index], this.heap[smallest]] = [this.heap[smallest], this.heap[index]]; // Swap
+            this.heapifyDown(smallest);            // Recursively heapify down
         }
     }
 }
 
 export function kSmallestPairs(nums1: number[], nums2: number[], k: number): number[][] {
-    const result: number[][] = [];
-    if (nums1.length === 0 || nums2.length === 0 || k === 0) return result;
+    const result: number[][] = [];                 // Store the k pairs with smallest sums
+    if (nums1.length === 0 || nums2.length === 0 || k === 0) return result; // Edge case: empty input
 
-    const minHeap = new MinHeap373();
-    const visited = new Set<string>();
+    const minHeap = new MinHeap373();              // Create a min-heap for pairs
+    const visited = new Set<string>();             // Track visited (i, j) pairs to avoid duplicates
 
-    // Push initial pairs (nums1[i], nums2[0])
+    // Push initial pairs (nums1[i], nums2[0]) for i in [0, min(k, nums1.length))
     for (let i = 0; i < Math.min(k, nums1.length); i++) {
-        minHeap.push([nums1[i] + nums2[0], i, 0]);
-        visited.add(`${i},0`);
+        minHeap.push([nums1[i] + nums2[0], i, 0]); // Push sum and indices to heap
+        visited.add(`${i},0`);                     // Mark (i, 0) as visited
     }
 
+    // Extract k pairs with smallest sums
     while (minHeap.size() > 0 && result.length < k) {
-        const [, i, j] = minHeap.pop();
-        result.push([nums1[i], nums2[j]]);
+        const [, i, j] = minHeap.pop();            // Pop smallest sum pair from heap
+        result.push([nums1[i], nums2[j]]);         // Add the pair to result
 
-        // Push next pair in nums2
+        // Push next pair in nums2 for the same i, if not visited
         if (j + 1 < nums2.length && !visited.has(`${i},${j + 1}`)) {
-            minHeap.push([nums1[i] + nums2[j + 1], i, j + 1]);
-            visited.add(`${i},${j + 1}`);
+            minHeap.push([nums1[i] + nums2[j + 1], i, j + 1]); // Push new pair to heap
+            visited.add(`${i},${j + 1}`);                      // Mark as visited
         }
     }
 
-    return result;
+    return result;                                 // Return the k pairs with smallest sums
 }
 
-/**
- * Example usage:
- * findKthLargest([3,2,1,5,6,4], 2) // 5
- * topKFrequent([1,1,1,2,2,3], 2) // [1,2]
- * kSmallestPairs([1,7,11], [2,4,6], 3) // [[1,2],[1,4],[1,6]]
- */
+/*
+Example usage:
+kSmallestPairs([1,7,11], [2,4,6], 3) // [[1,2],[1,4],[1,6]]
+*/

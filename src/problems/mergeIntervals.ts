@@ -13,105 +13,91 @@
  */
 
 /**
- * Merges overlapping intervals in a list.
+ * Problem #56: Merge Intervals (Medium)
  * 
- * @param nums - Array of intervals [start, end]
- * @returns Array of merged intervals
- * 
- * Steps:
+ * Given an array of intervals, merge all overlapping intervals.
+ * Approach:
  * 1. Sort intervals by start time.
- * 2. Iterate through intervals, merging if overlapping.
+ * 2. Iterate and merge overlapping intervals.
  * 3. Add non-overlapping intervals to result.
  * 
  * Example:
  * Input: [[1,3],[2,6],[8,10],[15,18]]
  * Output: [[1,6],[8,10],[15,18]]
  */
-export function merge(nums: number[][]): number[][] {
-    if (nums.length <= 1) return nums;
+export function merge(intervals: number[][]): number[][] {
+    if (intervals.length <= 1) return intervals;           // Edge case: 0 or 1 interval, nothing to merge
 
-    // Sort intervals by start time
-    nums.sort((a, b) => a[0] - b[0]);
+    intervals.sort((a, b) => a[0] - b[0]);                 // Sort intervals by start time
+    // Example: [[1,3],[2,6],[8,10],[15,18]] becomes [[1,3],[2,6],[8,10],[15,18]]
 
-    const result: number[][] = [nums[0]];
+    const result: number[][] = [intervals[0]];             // Initialize result with first interval
+    // Example: result = [[1,3]]
 
-    for (let i = 1; i < nums.length; i++) {
-        const current = nums[i];
-        const lastMerged = result[result.length - 1];
+    for (let i = 1; i < intervals.length; i++) {           // Iterate through intervals starting from second
+        const current = intervals[i];                      // Current interval, e.g. [2,6]
+        const lastMerged = result[result.length - 1];      // Last interval in result, e.g. [1,3]
 
-        if (current[0] <= lastMerged[1]) {
-            // Overlapping intervals, merge them by updating the end
-            lastMerged[1] = Math.max(lastMerged[1], current[1]);
+        if (current[0] <= lastMerged[1]) {                 // Overlap detected: current starts before lastMerged ends
+            // Example: [2,6][1,3] overlap since 2 <= 3
+            lastMerged[1] = Math.max(lastMerged[1], current[1]); // Merge by updating end time
+            // Example: lastMerged becomes [1,6]
         } else {
-            // Non-overlapping interval, add to result
-            result.push(current);
+            result.push(current);                          // No overlap, add current interval to result
+            // Example: result = [[1,6],[8,10]] after processing [8,10]
         }
     }
 
-    return result;
+    return result;                                         // Return merged intervals
 }
-
-export function merge2(nums: number[][]): number[][] {
-    if (nums.length === 0) return [];
-
-    // 1. 按起点排序
-    nums.sort((a, b) => a[0] - b[0]);
-
-    const result: number[][] = [];
-    let current = nums[0];
-
-    for (let i = 1; i < nums.length; i++) {
-        const [start, end] = nums[i];
-
-        if (start <= current[1]) {
-            // 2. 有重叠 → 更新右边界
-            current[1] = Math.max(current[1], end);
-        } else {
-            // 3. 无重叠 → 推入结果，重置当前区间
-            result.push(current);
-            current = nums[i];
-        }
-    }
-
-    // 最后一个区间别忘了加进去
-    result.push(current);
-
-    return result;
-}
-
 
 /**
- * Solution for "Insert Interval" - LeetCode #57
+ * Problem #57: Insert Interval (Medium)
  * 
- * Problem: Insert a new interval into a list of non-overlapping intervals and merge if necessary.
+ * Given a set of non-overlapping intervals and a new interval,
+ * insert the new interval and merge if necessary.
+ * Approach:
+ * 1. Add intervals before newInterval.
+ * 2. Merge overlapping intervals with newInterval.
+ * 3. Add intervals after newInterval.
  * 
- * Approach: Three-step process
- * - Add intervals before, merge overlapping, add after
- * 
- * Time Complexity: O(n)
- * Space Complexity: O(n)
+ * Example:
+ * Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+ * Output: [[1,5],[6,9]]
  */
-export function insert(nums: number[][], newNums: number[]): number[][] {
-    const result: number[][] = [];
+export function insert(intervals: number[][], newInterval: number[]): number[][] {
+    const result: number[][] = [];                         // Store merged intervals
     let i = 0;
+
     // Add intervals before newInterval
-    while (i < nums.length && nums[i][1] < newNums[0]) {
-        result.push(nums[i]);
+    // Example: intervals = [[1,3],[6,9]], newInterval = [2,5]
+    // First interval [1,3] ends at 3, which is not less than newInterval[0]=2, so skip this loop
+    while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+        result.push(intervals[i]);                         // Add intervals before newInterval
         i++;
     }
-    // Merge overlapping intervals
-    while (i < nums.length && nums[i][0] <= newNums[1]) {
-        newNums[0] = Math.min(newNums[0], nums[i][0]);
-        newNums[1] = Math.max(newNums[1], nums[i][1]);
+
+    // Merge overlapping intervals with newInterval
+    // Example: [1,3] overlaps with [2,5] since 1 <= 5
+    // Merge start: min(2,1)=1, Merge end: max(5,3)=5, newInterval becomes [1,5]
+    while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = Math.min(newInterval[0], intervals[i][0]); // Merge start
+        newInterval[1] = Math.max(newInterval[1], intervals[i][1]); // Merge end
         i++;
     }
-    result.push(newNums);
+    result.push(newInterval);                              // Add merged newInterval
+    // Example: result = [[1,5]]
+
     // Add intervals after newInterval
-    while (i < nums.length) {
-        result.push(nums[i]);
+    // Example: next interval [6,9] starts after newInterval[1]=5, so add it
+    while (i < intervals.length) {
+        result.push(intervals[i]);                         // Add intervals after newInterval
         i++;
     }
-    return result;
+    // Example: result = [[1,5],[6,9]]
+
+    return result;                                         // Return result
+    // Example output: [[1,5],[6,9]]
 }
 
 /**

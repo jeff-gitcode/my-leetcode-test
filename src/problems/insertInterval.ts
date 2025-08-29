@@ -74,37 +74,41 @@ export function groupAnagrams(strs: string[]): string[][] {
 
 
 /**
- * Solution for "Non-overlapping Intervals" - LeetCode #435
+ * Problem #435: Non-overlapping Intervals (Medium)
  * 
- * Problem: Given a collection of intervals, find the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
+ * Given an array of intervals, find the minimum number to remove to make the rest non-overlapping.
+ * Approach:
+ * 1. Sort intervals by end time.
+ * 2. Greedily select non-overlapping intervals.
+ * 3. Count how many intervals need to be removed.
  * 
- * Approach: Greedy (Sort by end time)
- * - Sort intervals by end time
- * - Iterate and count overlaps, remove intervals that overlap
- * 
- * Time Complexity: O(n log n) (due to sorting)
- * Space Complexity: O(1) (excluding output)
+ * Example:
+ * Input: [[1,2],[2,3],[3,4],[1,3]]
+ * Output: 1
+ * Explanation: Remove [1,3] to make the rest non-overlapping.
  */
-
 export function eraseOverlapIntervals(intervals: number[][]): number {
-    if (intervals.length === 0) return 0;
+    if (intervals.length <= 1) return 0;                   // Edge case: 0 or 1 interval, nothing to remove
+    // Example: intervals = [[1,2]] → return 0
 
-    // Sort intervals by end time
-    intervals.sort((a, b) => a[1] - b[1]);
+    intervals.sort((a, b) => a[1] - b[1]);                 // Sort intervals by end time
+    // Example: [[1,2],[2,3],[3,4],[1,3]] → [[1,2],[1,3],[2,3],[3,4]]
 
-    let count = 0;
-    let prevEnd = intervals[0][1];
+    let count = 0;                                         // Number of intervals to remove
+    let lastEnd = intervals[0][1];                         // End time of last non-overlapping interval
+    // Example: lastEnd = 2 (from [1,2])
 
-    for (let i = 1; i < intervals.length; i++) {
-        const [start, end] = intervals[i];
-        if (start < prevEnd) {
-            // Overlap, need to remove this interval
-            count++;
+    for (let i = 1; i < intervals.length; i++) {           // Iterate through intervals
+        // Example: i=1, intervals[1]=[1,3], intervals[1][0]=1 < lastEnd=2 → overlap
+        if (intervals[i][0] < lastEnd) {                   // Overlap detected
+            count++;                                       // Remove this interval
+            // Example: count = 1 (remove [1,3])
         } else {
-            // No overlap, update prevEnd
-            prevEnd = end;
+            lastEnd = intervals[i][1];                     // Update lastEnd for next comparison
+            // Example: i=2, intervals[2]=[2,3], intervals[2][0]=2 == lastEnd=2 → no overlap, update lastEnd=3
         }
     }
 
-    return count;
+    return count;                                          // Return number of intervals removed
+    // Example: eraseOverlapIntervals([[1,2],[2,3],[3,4],[1,3]]) → 1
 }
