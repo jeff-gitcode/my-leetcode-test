@@ -106,32 +106,53 @@ export function postorderTraversal(root: TreeNode | null): number[] {
 }
 
 /**
- * Level Order Traversal (BFS approach)
- * @param root - Root of the binary tree
- * @returns 2D array where each sub-array represents a level
+ * Problem #102: Binary Tree Level Order Traversal (Medium)
+ * 
+ * Given a binary tree, return its level order traversal as a 2D array.
+ * Approach:
+ * - Use BFS (queue) to traverse the tree level by level.
+ * - For each level, collect node values in an array.
+ * 
+ * Example:
+ * Input: [3,9,20,null,null,15,7]
+ * Tree:
+ *      3
+ *     / \
+ *    9  20
+ *       / \
+ *      15  7
+ * Output: [[3],[9,20],[15,7]]
  */
 export function levelOrder(root: TreeNode | null): number[][] {
-    if (!root) return [];
+    if (!root) return [];                           // Edge case: empty tree returns empty array
 
-    const result: number[][] = [];
-    const queue: TreeNode[] = [root];
+    const result: number[][] = [];                  // Store level order traversal
+    const queue: TreeNode[] = [root];               // Queue for BFS, start with root
+    // Example: queue = [3] for tree [3,9,20,null,null,15,7]
 
-    while (queue.length > 0) {
-        const levelSize = queue.length;
-        const currentLevel: number[] = [];
+    while (queue.length > 0) {                      // While there are nodes to process
+        const levelSize = queue.length;             // Number of nodes at current level
+        const currentLevel: number[] = [];          // Store values for this level
 
-        for (let i = 0; i < levelSize; i++) {
-            const node = queue.shift()!;
-            currentLevel.push(node.val);
+        for (let i = 0; i < levelSize; i++) {       // Process all nodes at this level
+            const node = queue.shift()!;            // Remove node from queue
+            currentLevel.push(node.val);            // Add node value to current level
+            // Example: first loop, node=3, currentLevel=[3]
 
-            if (node.left) queue.push(node.left);
-            if (node.right) queue.push(node.right);
+            if (node.left) queue.push(node.left);   // Add left child to queue if exists
+            // Example: node.left=9, queue=[9]
+            if (node.right) queue.push(node.right); // Add right child to queue if exists
+            // Example: node.right=20, queue=[9,20]
         }
 
-        result.push(currentLevel);
+        result.push(currentLevel);                  // Add current level to result
+        // Example: after first loop, result = [[3]], queue = [9,20]
+        // After second loop, result = [[3],[9,20]], queue = [15,7]
+        // After third loop, result = [[3],[9,20],[15,7]], queue = []
     }
 
-    return result;
+    return result;                                  // Return level order traversal
+    // Example output: [[3],[9,20],[15,7]]
 }
 
 /**

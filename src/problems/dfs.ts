@@ -29,11 +29,16 @@ export class TreeNode {
 }
 
 /**
- * Maximum Depth of Binary Tree
- * @param root - Root of the binary tree
- * @returns Maximum depth of the tree
+ * Problem #104: Maximum Depth of Binary Tree (Easy)
  * 
- * Example: 
+ * Given a binary tree, find its maximum depth.
+ * Approach:
+ * - Use recursion to compute the depth of left and right subtrees.
+ * - The depth of the tree is max(leftDepth, rightDepth) + 1.
+ * 
+ * Example:
+ * Input: [3,9,20,null,null,15,7]
+ * Tree:
  *      3
  *     / \
  *    9  20
@@ -42,42 +47,37 @@ export class TreeNode {
  * Output: 3
  */
 export function maxDepth(root: TreeNode | null): number {
-    if (!root) return 0;    // Base case: empty tree has depth 0
-
-    const leftDepth = maxDepth(root.left);    // Recursively get the depth of left subtree
-    const rightDepth = maxDepth(root.right);    // Recursively get the depth of right subtree
-
-    return Math.max(leftDepth, rightDepth) + 1;    // Return the larger depth + 1 (for current node)
+    if (!root) return 0;                        // Base case: empty tree has depth 0
+    const leftDepth = maxDepth(root.left);      // Recursively get depth of left subtree
+    const rightDepth = maxDepth(root.right);    // Recursively get depth of right subtree
+    return Math.max(leftDepth, rightDepth) + 1; // Depth is max of left/right + 1 for current node
+    // Example: leftDepth=1 (for 9), rightDepth=2 (for 20 subtree), so return 3
 }
 
+
 /**
- * Path Sum - Check if there's a path from root to leaf with given sum
- * @param root - Root of the binary tree
- * @param targetSum - Target sum to find
- * @returns True if path exists, false otherwise
+ * Problem #112: Path Sum (Easy)
+ * 
+ * Given a binary tree and a sum, check if the tree has a root-to-leaf path with that sum.
+ * Approach:
+ * - Recursively subtract node values from target sum.
+ * - If at a leaf node and remaining sum equals node value, return true.
  * 
  * Example:
- *      5
- *     / \
- *    4   8
- *   /   / \
- *  11  13  4
- * /  \      \
- * 7   2      1
- * 
- * targetSum = 22 => true (path: 5->4->11->2)
+ * Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], sum = 22
+ * Path: 5->4->11->2 = 22
+ * Output: true
  */
 export function hasPathSum(root: TreeNode | null, targetSum: number): boolean {
-    if (!root) return false;    // Base case: empty tree has no path
-
-    // If it's a leaf node, check if the value equals remaining sum
-    if (!root.left && !root.right) {    // Check if this is a leaf node (no children)
-        return root.val === targetSum;    // Check if this leaf node's value equals the target sum
+    if (!root) return false;                    // Base case: empty tree has no path
+    if (!root.left && !root.right) {            // Leaf node
+        return root.val === targetSum;          // Check if leaf value matches remaining sum
+        // Example: at node 2, targetSum=2, return true
     }
-
-    // Recursively check left and right subtrees with updated sum
-    const remainingSum = targetSum - root.val;    // Subtract current value from target sum
-    return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum);    // Check if either subtree has a valid path
+    const remainingSum = targetSum - root.val;  // Subtract current node value from sum
+    // Example: at node 5, targetSum=22, remainingSum=17
+    return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum);
+    // Recursively check left and right subtrees
 }
 
 /**
@@ -261,28 +261,24 @@ export class Node {
 export function cloneGraph(node: Node | null): Node | null {
     if (!node) return null;                          // Edge case: empty graph returns null
 
-    const visited = new Map<number, Node>();         // Map to track already cloned nodes (original node value → cloned node)
+    const visited = new Map<number, Node>();         // Map to track already cloned nodes
 
     // Helper function to perform DFS and clone nodes
     const dfs = (originalNode: Node): Node => {
-        // If we've already cloned this node, return the clone
-        if (visited.has(originalNode.val)) {         // Check if this node has already been cloned
-            return visited.get(originalNode.val)!;   // Return the existing clone from our map
+        if (visited.has(originalNode.val)) {         // If already cloned, return the clone
+            return visited.get(originalNode.val)!;
         }
-
-        // Create a new node with the same value
         const cloneNode = new Node(originalNode.val);    // Create a new node with same value
         visited.set(originalNode.val, cloneNode);    // Add mapping from original to clone
 
-        // Clone all neighbors by recursively calling DFS
-        for (const neighbor of originalNode.neighbors) {    // For each neighbor of the original node
-            cloneNode.neighbors.push(dfs(neighbor));    // Clone the neighbor and add to neighbors list
+        for (const neighbor of originalNode.neighbors) { // Clone all neighbors recursively
+            cloneNode.neighbors.push(dfs(neighbor)); // Add cloned neighbor to neighbors list
         }
-
-        return cloneNode;                           // Return the fully cloned node with all its neighbors
+        return cloneNode;                           // Return the fully cloned node
     };
 
-    return dfs(node);                               // Start DFS from the input node and return the clone
+    return dfs(node);                               // Start DFS from the input node
+    // Example: Input node 1, returns a new node 1 with cloned neighbors [2,4], etc.
 }
 
 /**

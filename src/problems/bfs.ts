@@ -58,85 +58,86 @@ export function rightSideView(root: TreeNode | null): number[] {
 }
 
 /**
- * Solution for "Rotting Oranges" - LeetCode #994
+ * Problem #994: Rotting Oranges (Medium)
  * 
- * Problem: Given a grid where each cell is one of three values:
- * 0: empty cell, 1: fresh orange, 2: rotten orange
- * Every minute, any fresh orange adjacent to a rotten orange becomes rotten.
- * Return the minimum number of minutes until no cell has a fresh orange.
- * If impossible, return -1.
+ * Given a grid of oranges, each cell is 0 (empty), 1 (fresh), or 2 (rotten).
+ * Each minute, fresh oranges adjacent to rotten ones become rotten.
+ * Return the minimum minutes until all oranges are rotten, or -1 if impossible.
  * 
- * Approach: BFS
- * - Start BFS from all initially rotten oranges
- * - Each level of BFS represents one minute
- * - Count fresh oranges initially and decrement when they rot
- * - If any fresh oranges remain at the end, return -1
- * 
- * Time Complexity: O(m * n)
- * Space Complexity: O(m * n)
+ * Approach:
+ * - Use BFS from all initially rotten oranges.
+ * - Track minutes and count fresh oranges.
+ * - If any fresh oranges remain at the end, return -1.
  * 
  * Example:
  * Input: [[2,1,1],[1,1,0],[0,1,1]]
  * Output: 4
+ * Explanation: All oranges rot in 4 minutes.
  */
 export function orangesRotting(grid: number[][]): number {
-    if (grid.length === 0 || grid[0].length === 0) return 0;
+    if (grid.length === 0 || grid[0].length === 0) return 0; // Edge case: empty grid
 
     const rows = grid.length;
     const cols = grid[0].length;
-    const queue: [number, number, number][] = [];  // [row, col, minute]
-    let freshCount = 0;    // Count of fresh oranges
+    const queue: [number, number, number][] = [];            // [row, col, minute]
+    let freshCount = 0;                                      // Count of fresh oranges
 
     // Find all rotten oranges and count fresh oranges
+    // Example: grid = [[2,1,1],[1,1,0],[0,1,1]]
+    // queue after loop: [[0,0,0]] (rotten at (0,0)), freshCount = 5
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
             if (grid[r][c] === 2) {
-                queue.push([r, c, 0]);  // Start BFS from each rotten orange
+                queue.push([r, c, 0]);                       // Start BFS from rotten orange
             } else if (grid[r][c] === 1) {
-                freshCount++;
+                freshCount++;                                // Count fresh oranges
             }
         }
     }
 
     let maxMinutes = 0;
-    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];  // Right, Down, Left, Up
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];   // Right, Down, Left, Up
 
     // BFS to rot oranges
+    // Example: minute 0, rotten at (0,0); minute 1, rot (0,1) and (1,0); minute 2, rot (0,2), (1,1); etc.
     while (queue.length > 0) {
         const [row, col, minute] = queue.shift()!;
-        maxMinutes = Math.max(maxMinutes, minute);
+        maxMinutes = Math.max(maxMinutes, minute);           // Track max minutes
 
-        // Check all 4 directions
-        for (const [dr, dc] of directions) {
+        for (const [dr, dc] of directions) {                 // Check all 4 directions
             const newRow = row + dr;
             const newCol = col + dc;
 
-            // Check bounds and if orange is fresh
+            // If in bounds and fresh orange found
             if (
                 newRow >= 0 && newRow < rows &&
                 newCol >= 0 && newCol < cols &&
                 grid[newRow][newCol] === 1
             ) {
-                grid[newRow][newCol] = 2;  // Mark as rotten
-                freshCount--;
-                queue.push([newRow, newCol, minute + 1]);
+                grid[newRow][newCol] = 2;                    // Rot the orange
+                freshCount--;                                // Decrement fresh count
+                queue.push([newRow, newCol, minute + 1]);    // Add to queue for next minute
+                // Example: minute 1, rot (0,1); minute 2, rot (0,2), etc.
             }
         }
     }
 
-    // If any fresh oranges remain, it's impossible to rot all oranges
+    // If any fresh oranges remain, return -1 (not all can rot)
+    // Example: returns 4 if all rot, -1 if some remain
     return freshCount > 0 ? -1 : maxMinutes;
+    // For grid [[2,1,1],[1,1,0],[0,1,1]], returns 4
 }
 
 /**
- * Solution for "Word Ladder" - LeetCode #127
+ * Solution for "Word Ladder" - LeetCode #127  (Hard)
  * 
  * Problem: Given two words beginWord and endWord, and a dictionary wordList,
  * find the length of shortest transformation sequence from beginWord to endWord.
  * 
- * Approach: BFS
- * - For each word, try changing each character to find valid transformations
- * - Use BFS to ensure shortest path
+ * Approach:
+ * - Use BFS to find shortest path from beginWord to endWord.
+ * - For each word, try changing each character to all possible letters.
+ * - Track visited words to avoid cycles.
  * 
  * Time Complexity: O(N * M^2) where N is dictionary size, M is word length
  * Space Complexity: O(N * M)
@@ -147,39 +148,32 @@ export function orangesRotting(grid: number[][]): number {
  * Explanation: The transformation sequence is "hit" -> "hot" -> "dot" -> "dog" -> "cog"
  */
 export function ladderLength(beginWord: string, endWord: string, wordList: string[]): number {
-    // If endWord is not in wordList, no transformation is possible
-    if (!wordList.includes(endWord)) return 0;
+    if (!wordList.includes(endWord)) return 0;               // If endWord not in wordList, no solution
 
-    // Convert wordList to a Set for O(1) lookups
-    const wordSet = new Set(wordList);
-
-    // BFS queue with [word, level]
-    const queue: [string, number][] = [[beginWord, 1]];
-    const visited = new Set<string>([beginWord]);
+    const wordSet = new Set(wordList);                       // Set for O(1) lookups
+    const queue: [string, number][] = [[beginWord, 1]];      // BFS queue: [word, level]
+    const visited = new Set<string>([beginWord]);            // Track visited words
 
     while (queue.length > 0) {
-        const [word, level] = queue.shift()!;
+        const [word, level] = queue.shift()!;                // Get current word and transformation level
 
-        // Try changing each character of the word
-        for (let i = 0; i < word.length; i++) {
-            // Try each letter from a to z
-            for (let c = 97; c <= 122; c++) {  // ASCII 'a' to 'z'
+        for (let i = 0; i < word.length; i++) {              // Try changing each character
+            for (let c = 97; c <= 122; c++) {                // ASCII 'a' to 'z'
                 const newChar = String.fromCharCode(c);
                 const newWord = word.slice(0, i) + newChar + word.slice(i + 1);
 
-                // If we found the endWord, return the level + 1
-                if (newWord === endWord) return level + 1;
+                if (newWord === endWord) return level + 1;   // Found endWord, return transformation length
 
-                // If this is a valid word and we haven't visited it, add to queue
                 if (wordSet.has(newWord) && !visited.has(newWord)) {
-                    visited.add(newWord);
-                    queue.push([newWord, level + 1]);
+                    visited.add(newWord);                    // Mark as visited
+                    queue.push([newWord, level + 1]);        // Add to queue for next level
                 }
             }
         }
     }
 
-    return 0;  // No transformation sequence found
+    return 0;                                                // No transformation sequence found
+    // Example: returns 5 for "hit" -> "hot" -> "dot" -> "dog" -> "cog"
 }
 
 /**
