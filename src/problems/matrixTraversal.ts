@@ -1,80 +1,114 @@
 /**
- * Matrix Traversal implementations
+ * Problem #54: Spiral Matrix(Medium)
+* 
+ * Given a matrix, return all elements in spiral order.
+ * Approach:
+ * - Use four pointers(top, bottom, left, right) to track boundaries.
+ * - Traverse the matrix in layers: right, down, left, up.
+ * - Move boundaries inward after each layer.
  * 
- * Patterns: Spiral traversal, diagonal traversal, flood fill
- * Applications: 2D array manipulation, image processing
- */
-
-/**
- * Spiral Matrix - Traverse matrix in spiral order
- * @param matrix - 2D matrix
- * @returns Array of elements in spiral order
- */
+ * Example:
+ * Input: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+ * Output: [1, 2, 3, 6, 9, 8, 7, 4, 5]
+*/
 export function spiralOrder(matrix: number[][]): number[] {
-    if (!matrix || matrix.length === 0) return [];
+    if (!matrix || matrix.length === 0) return [];      // Edge case: empty matrix
 
-    const result: number[] = [];
-    let top = 0;
-    let bottom = matrix.length - 1;
-    let left = 0;
-    let right = matrix[0].length - 1;
+    const result: number[] = [];                        // Store spiral order
+    let top = 0;                                       // Top boundary
+    let bottom = matrix.length - 1;                     // Bottom boundary
+    let left = 0;                                      // Left boundary
+    let right = matrix[0].length - 1;                   // Right boundary
 
+    // Traverse while boundaries are valid
+    // Example: matrix = [[1,2,3],[4,5,6],[7,8,9]]
     while (top <= bottom && left <= right) {
         // Traverse right
         for (let col = left; col <= right; col++) {
             result.push(matrix[top][col]);
+            // Example: first row, result = [1,2,3]
         }
-        top++;
+        top++; // Move top boundary down
 
         // Traverse down
         for (let row = top; row <= bottom; row++) {
             result.push(matrix[row][right]);
+            // Example: rightmost column, result = [1,2,3,6,9]
         }
-        right--;
+        right--; // Move right boundary left
 
-        // Traverse left (if we still have rows)
+        // Traverse left (if rows remain)
         if (top <= bottom) {
             for (let col = right; col >= left; col--) {
                 result.push(matrix[bottom][col]);
+                // Example: bottom row, result = [1,2,3,6,9,8,7]
             }
-            bottom--;
+            bottom--; // Move bottom boundary up
         }
 
-        // Traverse up (if we still have columns)
+        // Traverse up (if columns remain)
         if (left <= right) {
             for (let row = bottom; row >= top; row--) {
                 result.push(matrix[row][left]);
+                // Example: leftmost column, result = [1,2,3,6,9,8,7,4]
             }
-            left++;
+            left++; // Move left boundary right
         }
+        // Next layer: only the center remains, e.g. [5]
     }
 
-    return result;
+    return result; // Return spiral order
+    // Example output: [1,2,3,6,9,8,7,4,5]
 }
 
 /**
- * Rotate Image - Rotate matrix 90 degrees clockwise in-place
- * @param matrix - Square matrix to rotate
+ * Problem #48: Rotate Image (Medium)
+ * 
+ * Given an n x n matrix, rotate it 90 degrees clockwise in-place.
+ * Approach:
+ * - First transpose the matrix (swap rows and columns).
+ * - Then reverse each row.
+ * 
+ * Example:
+ * Input: [[1,2,3],[4,5,6],[7,8,9]]
+ * Output: [[7,4,1],[8,5,2],[9,6,3]]
  */
 export function rotate(matrix: number[][]): void {
     const n = matrix.length;
 
     // Step 1: Transpose the matrix
+    // Example: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+    // After transpose: [[1,4,7],[2,5,8],[3,6,9]]
     for (let i = 0; i < n; i++) {
         for (let j = i; j < n; j++) {
             [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]];
+            // Example: swap (0,1) with (1,0), (0,2) with (2,0), etc.
         }
     }
 
     // Step 2: Reverse each row
+    // Example: after transpose, row [1,4,7] becomes [7,4,1]
+    // Final matrix: [[7,4,1],[8,5,2],[9,6,3]]
     for (let i = 0; i < n; i++) {
         matrix[i].reverse();
+        // Example: row [1,4,7] becomes [7,4,1]
     }
+    // Matrix is now rotated in-place
+    // Example output: [[7,4,1],[8,5,2],[9,6,3]]
 }
 
 /**
- * Set Matrix Zeroes - Set entire row and column to 0 if element is 0
- * @param matrix - 2D matrix to modify
+ * Problem #73: Set Matrix Zeroes (Medium)
+ * 
+ * Given a matrix, if an element is 0, set its entire row and column to 0.
+ * Approach:
+ * - Use first row and column as markers for zero rows/columns.
+ * - Mark zeros in first row/column during traversal.
+ * - Set zeros based on markers, then handle first row/column separately.
+ * 
+ * Example:
+ * Input: [[1,1,1],[1,0,1],[1,1,1]]
+ * Output: [[1,0,1],[0,0,0],[1,0,1]]
  */
 export function setZeroes(matrix: number[][]): void {
     const rows = matrix.length;
@@ -90,6 +124,7 @@ export function setZeroes(matrix: number[][]): void {
             break;
         }
     }
+    // Example: matrix = [[1,1,1],[1,0,1],[1,1,1]], firstRowZero = false
 
     // Check if first column has zero
     for (let i = 0; i < rows; i++) {
@@ -98,6 +133,7 @@ export function setZeroes(matrix: number[][]): void {
             break;
         }
     }
+    // Example: matrix = [[1,1,1],[1,0,1],[1,1,1]], firstColZero = false
 
     // Use first row and column as markers
     for (let i = 1; i < rows; i++) {
@@ -105,32 +141,43 @@ export function setZeroes(matrix: number[][]): void {
             if (matrix[i][j] === 0) {
                 matrix[i][0] = 0; // Mark row
                 matrix[0][j] = 0; // Mark column
+                // Example: matrix[1][1]=0, mark matrix[1][0]=0 and matrix[0][1]=0
             }
         }
     }
+    // Example after marking: matrix = [[1,0,1],[0,0,1],[1,1,1]]
 
     // Set zeros based on markers
     for (let i = 1; i < rows; i++) {
         for (let j = 1; j < cols; j++) {
             if (matrix[i][0] === 0 || matrix[0][j] === 0) {
                 matrix[i][j] = 0;
+                // Example: row 1 and column 1 are marked, so set matrix[1][1]=0
             }
         }
     }
+    // Example after setting: matrix = [[1,0,1],[0,0,0],[1,0,1]]
 
     // Handle first row
     if (firstRowZero) {
         for (let j = 0; j < cols; j++) {
             matrix[0][j] = 0;
+            // Example: set all of first row to 0
         }
     }
+    // Example: first row remains unchanged in this case
 
     // Handle first column
     if (firstColZero) {
         for (let i = 0; i < rows; i++) {
             matrix[i][0] = 0;
+            // Example: set all of first column to 0
         }
     }
+    // Example: first column remains unchanged in this case
+
+    // Matrix is now modified in-place
+    // Example output: [[1,0,1],[0,0,0],[1,0,1]]
 }
 
 /**

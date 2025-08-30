@@ -239,8 +239,3 @@ export function shortestPathBinaryMatrix(grid: number[][]): number {
 
     return -1;  // No path found
 }
-        }
-    }
-
-return -1;
-}
