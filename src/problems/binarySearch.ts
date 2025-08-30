@@ -42,57 +42,56 @@ export function binarySearch(nums: number[], target: number): number {
 }
 
 /**
+ * Modified Binary Search Patterns
+ * 
+ * 1. Search in Rotated Sorted Array (#33)
+ * 2. Find Minimum in Rotated Sorted Array (#153)
+ * 3. Search a 2D Matrix II (#240)
+ */
+
+/**
  * Problem #33: Search in Rotated Sorted Array (Medium)
  * 
- * Given a rotated sorted array of unique elements, search for target value.
- * Return the index if found, otherwise return -1.
- * A rotated array is an array that was sorted, then rotated at some pivot.
- * 
+ * Given a rotated sorted array and a target value, return its index if found, else -1.
  * Approach:
- * 1. Use modified binary search algorithm
- * 2. First identify which half of the array is sorted (there's always one sorted half)
- * 3. Check if target is in the sorted half, if yes, search there; otherwise, search the other half
- * 4. Continue narrowing search space until element is found or search space is empty
- * 
- * Time Complexity: O(log n) - we divide the search space in half each time
- * Space Complexity: O(1) - we use constant extra space
+ * - At each step, determine which half is sorted.
+ * - If target is in the sorted half, search there; otherwise, search the other half.
  * 
  * Example:
  * Input: nums = [4,5,6,7,0,1,2], target = 0
  * Output: 4
- * Explanation: 0 exists in nums and its index is 4
  */
 export function searchInRotatedArray(nums: number[], target: number): number {
-    let left = 0;                              // Initialize left pointer at first element
-    let right = nums.length - 1;               // Initialize right pointer at last element
+    let left = 0;                              // Start pointer
+    let right = nums.length - 1;               // End pointer
 
-    while (left <= right) {                    // Continue while we have a valid search space
-        const mid = Math.floor((left + right) / 2);  // Calculate middle index
+    while (left <= right) {                    // While search space is valid
+        const mid = Math.floor((left + right) / 2); // Middle index
 
-        if (nums[mid] === target) {            // If target found at middle position
-            return mid;                        // Return the index immediately
-        }
+        if (nums[mid] === target) return mid;  // Found target, return index
 
-        // Check if left half is sorted (no rotation in this half)
+        // Check if left half is sorted
         if (nums[left] <= nums[mid]) {
-            // Left half is sorted, now check if target is within this sorted range
+            // Left half is sorted
+            // Example: nums = [4,5,6,7,0,1,2], left=0, mid=3, nums[left]=4, nums[mid]=7
             if (nums[left] <= target && target < nums[mid]) {
-                right = mid - 1;               // Target is in left sorted half
+                right = mid - 1;               // Target is in left half
             } else {
-                left = mid + 1;                // Target is in right half (may be unsorted)
+                left = mid + 1;                // Target is in right half
             }
         } else {
-            // Right half is sorted (no rotation in this half)
-            // Check if target is within this sorted range
+            // Right half is sorted
+            // Example: nums = [4,5,6,7,0,1,2], left=0, mid=5, nums[mid]=1, right=6, nums[right]=2
             if (nums[mid] < target && target <= nums[right]) {
-                left = mid + 1;                // Target is in right sorted half
+                left = mid + 1;                // Target is in right half
             } else {
-                right = mid - 1;               // Target is in left half (may be unsorted)
+                right = mid - 1;               // Target is in left half
             }
         }
     }
 
-    return -1;                                 // Target not found in array
+    return -1;                                 // Target not found
+    // Example: returns 4 for target=0 in [4,5,6,7,0,1,2]
 }
 
 /**
@@ -116,24 +115,25 @@ export function searchInRotatedArray(nums: number[], target: number): number {
  * Explanation: The original array was [1,2,3,4,5] rotated 3 times, min is 1
  */
 export function findMinInRotatedArray(nums: number[]): number {
-    let left = 0;                              // Initialize left pointer at first element
-    let right = nums.length - 1;               // Initialize right pointer at last element
+    let left = 0;                              // Start pointer
+    let right = nums.length - 1;               // End pointer
 
-    while (left < right) {                     // Continue until we've narrowed to a single element
-        const mid = Math.floor((left + right) / 2);  // Calculate middle index
+    while (left < right) {                     // While search space is valid
+        const mid = Math.floor((left + right) / 2); // Middle index
 
         // If middle value is greater than rightmost value,
         // minimum element must be in the right half
         if (nums[mid] > nums[right]) {
-            left = mid + 1;                    // Minimum is in right half, adjust left boundary
+            left = mid + 1;                    // Minimum is in right half
+            // Example: nums = [4,5,6,7,0,1,2], mid=3, nums[mid]=7, nums[right]=2
         } else {
-            // If middle value is less than or equal to rightmost value,
-            // minimum element must be in the left half (including mid)
-            right = mid;                       // Minimum is in left half, adjust right boundary
+            right = mid;                       // Minimum is in left half (including mid)
+            // Example: nums = [3,4,5,1,2], mid=2, nums[mid]=5, nums[right]=2
         }
     }
 
     return nums[left];                         // At this point, left and right converge to minimum
+    // Example: returns 1 for [3,4,5,1,2]
 }
 
 /**
@@ -307,13 +307,24 @@ export function findMin(nums: number[]): number {
 }
 
 /**
- * Search a 2D Matrix II - Search in row and column sorted matrix
- * @param matrix - Matrix sorted row-wise and column-wise
- * @param target - Target value to search
- * @returns True if target found, false otherwise
+ * Problem #240: Search a 2D Matrix II (Medium)
+ * 
+ * Given a matrix sorted row-wise and column-wise, search for a target value.
+ * Approach:
+ * - Start from top-right corner, move left if too large, move down if too small.
+ * 
+ * Example:
+ * Input: matrix = [
+ *   [1, 4, 7, 11, 15],
+ *   [2, 5, 8, 12, 19],
+ *   [3, 6, 9, 16, 22],
+ *   [10,13,14,17,24],
+ *   [18,21,23,26,30]
+ * ], target = 5
+ * Output: true
  */
 export function searchMatrixII(matrix: number[][], target: number): boolean {
-    if (!matrix || matrix.length === 0 || matrix[0].length === 0) return false;
+    if (!matrix || matrix.length === 0 || matrix[0].length === 0) return false; // Edge case
 
     const rows = matrix.length;
     const cols = matrix[0].length;
@@ -324,15 +335,16 @@ export function searchMatrixII(matrix: number[][], target: number): boolean {
 
     while (row < rows && col >= 0) {
         if (matrix[row][col] === target) {
-            return true;
+            return true;                      // Found target
         } else if (matrix[row][col] > target) {
-            // Current element is too large, move left
-            col--;
+            col--;                            // Current element is too large, move left
+            // Example: matrix[0][4]=15 > 5, move to col=3
         } else {
-            // Current element is too small, move down
-            row++;
+            row++;                            // Current element is too small, move down
+            // Example: matrix[0][1]=4 < 5, move to row=1
         }
     }
 
-    return false;
+    return false;                             // Target not found
+    // Example: returns true for target=5 in matrix above
 }
