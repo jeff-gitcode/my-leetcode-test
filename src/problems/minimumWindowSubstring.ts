@@ -93,31 +93,52 @@ export function minWindow(s: string, t: string): string {
  * Explanation: The minimum window substring is "BANC".
  */
 export function minWindow2(s: string, t: string): string {
-    if (t.length === 0) return "";
+    if (t.length === 0) return ""; // If t is empty, return empty string
+    // Example: s="abc", t="", returns ""
+
     const need = new Map<string, number>();
     for (const c of t) need.set(c, (need.get(c) || 0) + 1);
+    // Example: t="ABC", need={'A':1,'B':1,'C':1}
 
     let left = 0, right = 0, matches = 0, minLen = Infinity, minStart = 0;
-    const map = new Map<string, number>();
+    // left/right: window pointers; matches: number of chars matched; minLen/minStart: track min window
+
+    const map = new Map<string, number>(); // Map for current window character counts
 
     while (right < s.length) {
-        const c = s[right];
-        map.set(c, (map.get(c) || 0) + 1);
-        if (need.has(c) && map.get(c) === need.get(c)) matches++;
+        const c = s[right]; // Current character at right pointer
+        map.set(c, (map.get(c) || 0) + 1); // Add character to window count
+        // Example: s="ADOBECODEBANC", right=0, c='A', map={'A':1}
 
-        while (matches === need.size) {
+        if (need.has(c) && map.get(c) === need.get(c)) matches++;
+        // If current char count matches need, increment matches
+        // Example: right=0, c='A', matches=1
+
+        while (matches === need.size) { // While all required chars are matched
             if (right - left + 1 < minLen) {
                 minLen = right - left + 1;
                 minStart = left;
+                // Example: found window "ADOBEC" (left=0, right=5), minLen=6, minStart=0
             }
-            const leftChar = s[left];
-            map.set(leftChar, map.get(leftChar)! - 1);
+            const leftChar = s[left]; // Character at left pointer
+            map.set(leftChar, map.get(leftChar)! - 1); // Remove leftChar from window count
+            // Example: left=0, leftChar='A', map={'A':0,...}
+
             if (need.has(leftChar) && map.get(leftChar)! < need.get(leftChar)!) matches--;
-            left++;
+            // If removing leftChar breaks requirement, decrement matches
+            // Example: leftChar='A', map['A']=0 < need['A']=1, matches--
+
+            left++; // Move left pointer to contract window
+            // Example: left moves from 0 to 1
         }
-        right++;
+        right++; // Move right pointer to expand window
+        // Example: right moves from 0 to 1
     }
+    // After loop, minLen and minStart track the smallest valid window
+
     return minLen === Infinity ? "" : s.slice(minStart, minStart + minLen);
+    // If no window found, return ""; else, return substring
+    // Example: s="ADOBECODEBANC", t="ABC", returns "BANC"
 }
 
 /**

@@ -21,24 +21,31 @@
  */
 
 export function maxArea(height: number[]): number {
-    let maxWater = 0;
-    let left = 0;
-    let right = height.length - 1;
+    let maxWater = 0;                            // Initialize maximum water area found so far
+    let left = 0;                                // Left pointer starts at beginning of array
+    let right = height.length - 1;               // Right pointer starts at end of array
+    // Example: height = [1,8,6,2,5,4,8,3,7], left = 0, right = 8
 
-    while (left < right) {
+    while (left < right) {                       // Continue until pointers meet
         // Calculate water area based on the shorter height and width between pointers
-        const h = Math.min(height[left], height[right]);
-        const w = right - left;
-        maxWater = Math.max(maxWater, h * w);
+        const h = Math.min(height[left], height[right]); // Height is limited by shorter line
+        // Example: h = min(height[0], height[8]) = min(1, 7) = 1
+        const w = right - left;                  // Width is distance between pointers
+        // Example: w = 8 - 0 = 8
+        maxWater = Math.max(maxWater, h * w);    // Update maximum if current area is larger
+        // Example: maxWater = max(0, 1 * 8) = 8
 
         // Move the pointer at the shorter line inward
         // This is optimal because moving the taller line would only potentially decrease the area
         if (height[left] < height[right]) {
-            left++;
+            left++;                              // Move left pointer right if left height is smaller
+            // Example: height[0] = 1 < height[8] = 7, so left = 1
         } else {
-            right--;
+            right--;                             // Move right pointer left if right height is smaller or equal
+            // Example: if height[left] >= height[right], right--
         }
     }
 
-    return maxWater;
+    return maxWater;                             // Return the maximum water area found
+    // Example: returns 49 for height = [1,8,6,2,5,4,8,3,7]
 }

@@ -24,33 +24,46 @@
 export function lengthOfLongestSubstring(s: string): number {
     // If the input string is empty, return 0 (no substring exists)
     if (s.length === 0) return 0;
+    // Example: s = "", returns 0
 
     // Map to store the last seen index of each character
     const map = new Map<string, number>();
+    // Example: for s = "abcabcbb", map will track indices of 'a', 'b', 'c'
+
     // Left pointer for the sliding window
     let left = 0;
+    // Example: left = 0 at start
+
     // Variable to store the maximum length found
     let result = 0;
+    // Example: result = 0 at start
 
     // Iterate through each character in the string
     for (let i = 0; i < s.length; i++) {
         // Current character at index i
         const current = s[i];
+        // Example: i=0, current='a'; i=1, current='b'; i=2, current='c'
 
         // If character is already in the current window, move left pointer
         // past the previous occurrence of the character
         if (map.has(current) && map.get(current)! >= left) {
             left = map.get(current)! + 1;
+            // Example: s="abcabcbb", i=3, current='a', map.get('a')=0, left=1
+            // This moves left to exclude the previous 'a'
         }
 
         // Update the map with the current character's latest index
         map.set(current, i);
+        // Example: after i=2, map={'a':0,'b':1,'c':2}; after i=3, map={'a':3,'b':1,'c':2}
+
         // Update the result with the maximum window size found so far
         result = Math.max(result, i - left + 1);
+        // Example: i=2, left=0, result=3 ("abc"); i=3, left=1, result=3 ("bca")
     }
 
     // Return the maximum length of substring without repeating characters
     return result;
+    // Example: s="abcabcbb" returns 3 ("abc"), s="bbbbb" returns 1 ("b")
 }
 
 

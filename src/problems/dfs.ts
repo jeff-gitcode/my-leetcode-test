@@ -48,10 +48,16 @@ export class TreeNode {
  */
 export function maxDepth(root: TreeNode | null): number {
     if (!root) return 0;                        // Base case: empty tree has depth 0
+    // Example: if root is null, return 0
+
     const leftDepth = maxDepth(root.left);      // Recursively get depth of left subtree
+    // Example: for tree [3,9,20,null,null,15,7], leftDepth = maxDepth(node 9) = 1
+
     const rightDepth = maxDepth(root.right);    // Recursively get depth of right subtree
+    // Example: rightDepth = maxDepth(node 20) = 2 (since 20 has children 15 and 7)
+
     return Math.max(leftDepth, rightDepth) + 1; // Depth is max of left/right + 1 for current node
-    // Example: leftDepth=1 (for 9), rightDepth=2 (for 20 subtree), so return 3
+    // Example: Math.max(1, 2) + 1 = 3 (leftDepth=1, rightDepth=2, so total depth=3)
 }
 
 
@@ -260,21 +266,32 @@ export class Node {
  */
 export function cloneGraph(node: Node | null): Node | null {
     if (!node) return null;                          // Edge case: empty graph returns null
+    // Example: if node is null, return null
 
     const visited = new Map<number, Node>();         // Map to track already cloned nodes
+    // Example: visited = new Map() initially empty
 
     // Helper function to perform DFS and clone nodes
     const dfs = (originalNode: Node): Node => {
         if (visited.has(originalNode.val)) {         // If already cloned, return the clone
             return visited.get(originalNode.val)!;
+            // Example: if node 1 already cloned, return existing clone
         }
+
         const cloneNode = new Node(originalNode.val);    // Create a new node with same value
+        // Example: originalNode.val = 1, create new Node(1)
+
         visited.set(originalNode.val, cloneNode);    // Add mapping from original to clone
+        // Example: visited.set(1, cloneNode) maps value 1 to new node
 
         for (const neighbor of originalNode.neighbors) { // Clone all neighbors recursively
             cloneNode.neighbors.push(dfs(neighbor)); // Add cloned neighbor to neighbors list
+            // Example: if originalNode has neighbors [2,4], recursively clone each
+            // and add to cloneNode.neighbors = [cloned_2, cloned_4]
         }
+
         return cloneNode;                           // Return the fully cloned node
+        // Example: return cloned node 1 with all neighbors properly cloned
     };
 
     return dfs(node);                               // Start DFS from the input node

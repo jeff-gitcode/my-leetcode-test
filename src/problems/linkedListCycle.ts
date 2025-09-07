@@ -31,22 +31,29 @@ export class ListNode {
 export function hasCycle(head: ListNode | null): boolean {
     // Edge case: empty list or single node
     if (!head || !head.next) return false;
+    // Example: null list returns false, [1] returns false
 
     // Initialize slow and fast pointers at the head
     let slow: ListNode | null = head;
     let fast: ListNode | null = head;
+    // Example: for list [3,2,0,-4] with cycle, both start at node 3
 
     // Move slow by 1 step and fast by 2 steps
     while (fast && fast.next) {
         slow = slow!.next;          // Move slow pointer by 1
         fast = fast.next.next;      // Move fast pointer by 2
+        // Example: iteration 1: slow at 2, fast at 0
+        // Example: iteration 2: slow at 0, fast at 2
+        // Example: iteration 3: slow at -4, fast at -4 (they meet!)
 
         // If they meet, there's a cycle
         if (slow === fast) return true;
+        // Example: when slow and fast both point to same node, cycle detected
     }
 
     // If fast reaches the end, there's no cycle
     return false;
+    // Example: for list [1,2,3] fast becomes null,
 }
 
 /**
@@ -166,4 +173,50 @@ export function findDuplicate(nums: number[]): number {
     }
 
     return slow;                              // Return the entrance to cycle (duplicate number)
+}
+
+/**
+ * Solution for "Middle of the Linked List" - LeetCode #876
+ * 
+ * Problem: Given the head of a singly linked list, return the middle node of the linked list.
+ * If there are two middle nodes, return the second middle node.
+ * 
+ * Approach: Fast & Slow Pointers (Floyd's Tortoise and Hare)
+ * - Use two pointers moving at different speeds
+ * - Slow pointer moves 1 step, fast pointer moves 2 steps
+ * - When fast reaches the end, slow will be at the middle
+ * 
+ * Time Complexity: O(n)
+ * Space Complexity: O(1)
+ * 
+ * Example:
+ * Input: head = [1,2,3,4,5]
+ * Output: [3,4,5] (return node with value 3)
+ * 
+ * Input: head = [1,2,3,4,5,6]
+ * Output: [4,5,6] (return node with value 4, the second middle)
+ */
+export function middleNode(head: ListNode | null): ListNode | null {
+    // Edge case: empty list
+    if (!head) return null;
+    // Example: null list returns null
+
+    // Initialize both pointers at the head
+    let slow: ListNode | null = head;
+    let fast: ListNode | null = head;
+    // Example: for list [1,2,3,4,5], both start at node 1
+
+    // Move slow by 1 step and fast by 2 steps
+    while (fast && fast.next) {
+        slow = slow!.next;          // Move slow pointer by 1
+        fast = fast.next.next;      // Move fast pointer by 2
+        // Example: iteration 1: slow at 2, fast at 3
+        // Example: iteration 2: slow at 3, fast at 5
+        // Example: iteration 3: fast.next is null, loop ends
+    }
+
+    // When fast reaches the end, slow is at the middle
+    return slow;
+    // Example: returns node with value 3 for [1,2,3,4,5]
+    // Example: returns node with value 4 for [1,2,3,4,5,6]
 }
